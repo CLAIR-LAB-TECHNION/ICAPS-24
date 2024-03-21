@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<world>
+  <robot name="ur5" file="ur5.urdf" position="0 0 0.976841" rotateZ="1.57079632679"/>
+</world>
