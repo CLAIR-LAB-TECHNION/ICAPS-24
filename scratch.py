@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 from klampt import WorldModel, Geometry3D, RobotModel
 from klampt.model.geometry import box
@@ -56,11 +58,11 @@ if __name__ == '__main__':
     robot = world.robot(0)
 
     collider = WorldCollider(world)
-    sim = Simulator(world)
+    # sim = Simulator(world)
     cspace = RobotCSpace(robot, collider)
-    # cspace.eps = 1e-2
+    cspace.eps = 1e-2
     # cspace.setup()
-    MotionPlan.setOptions(type="rrt*", bidirectional=True)
+    MotionPlan.setOptions(type="rrt", bidirectional=True, shortcut=True,)
     planner = MotionPlan(cspace)
 
     vis.add("world", world)
@@ -83,8 +85,16 @@ if __name__ == '__main__':
     # look at noself collision in URDF. robot is coliding with itself at zero config
 
     planner.setEndpoints(start_c, goal_c)
-    planner.planMore(100)
-    path = planner.getPath()
+
+    t = time.time()
+    path = None
+    while path is None:
+        print("planning...")
+        planner.planMore(50)
+        path = planner.getPath()
+
+    print("planning took: ", time.time() - t)
+
     planner.space.close()
     planner.close()
 
