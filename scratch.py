@@ -10,6 +10,8 @@ from klampt.model.collide import WorldCollider
 from klampt.sim import Simulator
 from klampt.model import ik
 
+from klampt.plan import robotplanning
+
 
 ROBOT_HEIGHT = 0.903 + 0.163 - 0.089159
 # 0.903 is the height of the robot mount, 0.163 is the height of the shift of shoulder link in mujoco,
@@ -74,10 +76,17 @@ if __name__ == '__main__':
     start_T = robot.link("ee_link").getTransform()
     # T is tuple of (R, t) where R is flattened
     # move in y towards the base:
-    goal_T = list(start_T)
-    goal_T[1][1] -= 0.4
+    # goal_T = list(start_T)
+    # goal_T[1][1] -= 0.4
+    goal_T = [[0, 0, -1, 0, 1, 0 ,1, 0, 0], [-0.19144999999599827, 0.4172500000009377, 0.97135]]
+
+
     goal_objective = ik.objective(body=ee_link, R=goal_T[0], t=goal_T[1])
-    if not ik.solve(goal_objective):
+
+    mp = robotplanning.plan_to_cartesian_objective(world, robot, goal_objective)
+
+    print("goal_T: ", goal_T)
+    if not ik.solve_global(goal_objective):
         print("no ik solution for goal")
     goal_c = robot.getConfig()
 

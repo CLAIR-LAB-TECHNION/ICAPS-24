@@ -11,7 +11,6 @@ from klampt.sim import Simulator
 from klampt.model import ik
 
 
-
 class TableWorldMotionPlanner():
     robot_height = 0.903 + 0.163 - 0.089159
     # 0.903 is the height of the robot mount, 0.163 is the height of the shift of shoulder link in mujoco,
@@ -40,22 +39,16 @@ class TableWorldMotionPlanner():
 
     def plan_from_start_to_goal_config(self, start_config, goal_config, max_time=30):
         """
-        plan from a start and a goal that are given in robot 6d configuration space
+        plan from a start and a goal that are given in 6d configuration space
         """
-        # There are 10 links in our URDF for klampt, some are stationary, actual joints are 2:8
         start_config_klampt = self.config6d_to_klampt(start_config)
         goal_config_klampt = self.config6d_to_klampt(goal_config)
+        path = self._plan_from_start_to_goal_config_klampt(start_config_klampt, goal_config_klampt, max_time)
 
-        self.planner.setEndpoints(start_config_klampt, goal_config_klampt)
-
-        start_time = time.time()
-        path = None
-        while path is None and time.time() - start_time < max_time:
-            self.planner.planMore(50)
-            path = self.planner.getPath()
-        if path is None:
-            print("no path found")
+        for i in range(len(path)):
+            path[i] = self.klampt_to_config6d(path[i])
         return path
+
 
     def config6d_to_klampt(self, config):
         """
@@ -92,7 +85,31 @@ class TableWorldMotionPlanner():
         """
         move to a config wwithin the internal world model of the motion planner. Use for visualization.
         """
+        if len(q) == 6:
+            q = self.config6d_to_klampt(q)  # convert to klampt 10d config
         self.robot.setConfig(q)
+
+    def vis_spin(self, n):
+        """
+        spin the visualization for n steps
+        """
+        vis.spin(n)
+
+    def _plan_from_start_to_goal_config_klampt(self, start_config, goal_config, max_time=30):
+        """
+        plan from a start and a goal that are given in klampt 10d configuration space
+        """
+
+        self.planner.setEndpoints(start_config, goal_config)
+
+        start_time = time.time()
+        path = None
+        while path is None and time.time() - start_time < max_time:
+            self.planner.planMore(50)
+            path = self.planner.getPath()
+        if path is None:
+            print("no path found")
+        return path
 
     def _ik_solve(self, goal_pos, goal_R):
         """
@@ -101,10 +118,16 @@ class TableWorldMotionPlanner():
         """
         goal_R_flat = np.array(goal_R).flatten()
         goal_objective = ik.objective(self.ee_link, R=goal_R_flat, t=goal_pos)
-        if not ik.solve(goal_objective):
+        if not ik.solve_global(goal_objective):
             print("no ik solution for goal: ", goal_pos, goal_R)
             return None
-        return self.robot.getConfig()
+        sol = self.robot.getConfig()
+        # check for collision in world and robot:
+        if self.cspace.selfCollision() or any(self.collider.robotObjectCollisions(self.robot)):
+            print("ik solution is in collision")
+            return None
+
+        return sol
 
     def _build_world(self):
         self._add_box_geom("floor", (5, 5, 0.01), [0, 0, 0], [0.1, 0.1, 0.1, 1])
