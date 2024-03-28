@@ -53,7 +53,7 @@ if __name__ == '__main__':
     add_box_geom(world, "table_left", size=(0.74, 0.74, 0.01), center=[0, -0.6, 0.7], color=[0.5, 0.5, 0.5, 0.8])
     add_box_geom(world, "table_right", size=(0.74, 0.74, 0.01), center=[0, 0.6, 0.7], color=[0.5, 0.5, 0.5, 0.8])
     add_box_geom(world, "purpule_box", size=(0.1, 0.1, 0.02), center=[-0.2, 0.5, 0.72], color=[0.5, 0.1, 0.5, 1])
-    add_box_geom(world, "robot_mount_approx", size=(0.45, 0.3, MOUNT_TOP_BASE), center=[-0.1, 0, MOUNT_TOP_BASE/2],
+    add_box_geom(world, "robot_mount_approx", size=(0.45, 0.25, MOUNT_TOP_BASE), center=[-0.1, 0, MOUNT_TOP_BASE/2],
                  color=[0.5, 0.5, 0.5, 1])
 
     # set robot position in the world:
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     # goal_T[1][1] -= 0.4
     goal_T_1 = [[0, 0, -1, 0, 1, 0, 1, 0, 0], [-0.19144999999599827, 0.4172500000009377, 0.97135]]
     # same as 1 but rotate around z by 90 degrees:
-    goal_T_2 = [[0, -1, 0, 0, 0, 1, -1, 0, 0], [-0.19144999999599827, 0.4172500000009377, 0.97135]]
+    goal_T_2 = [[0, -1, 0, 0, 0, 1, -1, 0, 0], [-0.19144999999599827, 0.7172500000009377, 0.97135]]
 
 
     goal_objective_1 = ik.objective(body=ee_link, R=goal_T_1[0], t=goal_T_1[1])
@@ -118,6 +118,7 @@ if __name__ == '__main__':
     # TODO next: motion plan, then check alignment with mujoco
 
     pass
+
 
 """
 PLANNING with constraints example from chatgpt:

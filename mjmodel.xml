@@ -36,6 +36,9 @@
         </default>
       </default>
     </default>
+    <default class="rethink_mount_stationary/ur5e/adhesive gripper/active_adhesion">
+      <geom margin="0.01" gap="0.01" rgba="0.8 0.5 0.5 1"/>
+    </default>
   </default>
   <asset>
     <texture type="skybox" name="//unnamed_texture_0" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
@@ -174,6 +177,15 @@
                         <geom name="rethink_mount_stationary/ur5e//unnamed_geom_27" class="rethink_mount_stationary/ur5e/visual" material="rethink_mount_stationary/ur5e/linkgray" mesh="rethink_mount_stationary/ur5e/wrist3"/>
                         <geom name="rethink_mount_stationary/ur5e//unnamed_geom_28" class="rethink_mount_stationary/ur5e/eef_collision" size="0.04 0.02" pos="0 0.08 0" quat="0.707107 0.707107 0 0"/>
                         <site name="rethink_mount_stationary/ur5e/attachment_site" pos="0 0.1 0" quat="-0.707107 0.707107 0 0"/>
+                        <body name="rethink_mount_stationary/ur5e/adhesive gripper/" pos="0 0.1 0" quat="-0.707107 0.707107 0 0">
+                          <body name="rethink_mount_stationary/ur5e/adhesive gripper/4boxes" childclass="rethink_mount_stationary/ur5e/adhesive gripper/active_adhesion" quat="0 0 1 0">
+                            <geom name="rethink_mount_stationary/ur5e/adhesive gripper//unnamed_geom_0" size="0.015" pos="0.015 0.015 0"/>
+                            <geom name="rethink_mount_stationary/ur5e/adhesive gripper//unnamed_geom_1" size="0.015" pos="0.015 -0.015 0"/>
+                            <geom name="rethink_mount_stationary/ur5e/adhesive gripper//unnamed_geom_2" size="0.015" pos="-0.015 0.015 0"/>
+                            <geom name="rethink_mount_stationary/ur5e/adhesive gripper//unnamed_geom_3" size="0.015" pos="-0.015 -0.015 0"/>
+                            <site name="rethink_mount_stationary/ur5e/adhesive gripper/force_sensor" pos="0 0 0" group="3"/>
+                          </body>
+                        </body>
                       </body>
                     </body>
                   </body>
@@ -192,5 +204,9 @@
     <general name="rethink_mount_stationary/ur5e/wrist_1" class="rethink_mount_stationary/ur5e/size1" joint="rethink_mount_stationary/ur5e/wrist_1_joint"/>
     <general name="rethink_mount_stationary/ur5e/wrist_2" class="rethink_mount_stationary/ur5e/size1" joint="rethink_mount_stationary/ur5e/wrist_2_joint"/>
     <general name="rethink_mount_stationary/ur5e/wrist_3" class="rethink_mount_stationary/ur5e/size1" joint="rethink_mount_stationary/ur5e/wrist_3_joint"/>
+    <general name="rethink_mount_stationary/ur5e/adhesive gripper/adhere_arm" class="rethink_mount_stationary/ur5e/adhesive gripper/active_adhesion" body="rethink_mount_stationary/ur5e/adhesive gripper/4boxes" ctrllimited="true" ctrlrange="0 1" gainprm="30"/>
   </actuator>
+  <sensor>
+    <force site="rethink_mount_stationary/ur5e/adhesive gripper/force_sensor" name="rethink_mount_stationary/ur5e/adhesive gripper//unnamed_sensor_0"/>
+  </sensor>
 </mujoco>
