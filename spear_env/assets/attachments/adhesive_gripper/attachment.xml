@@ -23,7 +23,7 @@
 
   <actuator>
 <!--    <adhesion name="adhere_arm" body="4boxes" ctrlrange="0 1" gain="5"/>-->
-      <adhesion name="adhere_arm" body="4boxes" ctrlrange="0 1" gain="10000"/>
+      <adhesion name="adhere_arm" body="4boxes" ctrlrange="0 1" gain="30"/>
   </actuator>
 
   <sensor>

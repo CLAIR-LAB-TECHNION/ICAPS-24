@@ -16,7 +16,7 @@ if __name__ == '__main__':
     for i in range(10):
         env.step(robot_joint_pos)
 
-    red_box_pos = env.get_object_pos('red_box') + np.array([0, 0, 0.015])  # TODO + box size
+    red_box_pos = env.get_object_pos('red_box') + np.array([0, 0, 0.01])  # TODO + box size
     above_red_box_pos = red_box_pos + np.array([0, 0, 0.1])
     path = planner.plan_from_config_to_pose(robot_joint_pos, above_red_box_pos, facing_down_R)
 

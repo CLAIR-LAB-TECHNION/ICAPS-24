@@ -36,24 +36,24 @@
             <geom name="table_right_leg_4" type="cylinder" size=".01 .7" pos="-.24 .24 -.0" euler="0 0 0"/>
         </body>
 
-        <body name="red_box" pos="0 -0.8 0.74" quat="0. 0. 1. 0.">
+        <body name="red_box" pos="0 -0.8 0.72" quat="0. 0. 1. 0.">
             <freejoint/>
-            <geom type="box" size=".05 .05 .03" rgba="1 0 0 1"/>-->
+            <geom type="box" size=".05 .05 .01" rgba="1 0 0 1"/>-->
         </body>
 
-        <body name="yellow box" pos="0.1 -0.3 0.74">
+        <body name="yellow box" pos="0.1 -0.3 0.72">
             <freejoint/>
-            <geom type="box" size=".05 .05 .03" rgba="1 1 0 1"/>
+            <geom type="box" size=".05 .05 .01" rgba="1 1 0 1"/>
         </body>
 
-        <body name="cyan box" pos="-0.1 -0.7 0.74">
+        <body name="cyan box" pos="-0.1 -0.7 0.72">
             <freejoint/>
-            <geom type="box" size=".05 .05 .03" rgba="0 1 1 1"/>
+            <geom type="box" size=".05 .05 .01" rgba="0 1 1 1"/>
         </body>
 
-        <body name="purple box" pos="-0.2 0.5 0.74">
+        <body name="purple box" pos="-0.2 0.5 0.72">
             <freejoint/>
-            <geom type="box" size=".05 .05 .03" rgba="1 0 1 1"/>
+            <geom type="box" size=".05 .05 .01" rgba="1 0 1 1"/>
         </body>
         
         <camera name="top-right" pos="2.5 1.2 2.5" euler="1 0 2"/>
