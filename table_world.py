@@ -62,7 +62,7 @@ class TableWorld():
     def get_object_pos(self, name: str):
         return self._mj_model.body(name).pos
 
-    def move_to(self, target_joint_pos, tolerance=0.05, max_steps=None):
+    def move_to(self, target_joint_pos, tolerance=0.05, end_vel=0.01, max_steps=None):
         """
         move robot joints to target config, until it is close within tolerance, or max_steps exceeded.
         @param target_joint_pos: position to move to
@@ -73,7 +73,9 @@ class TableWorld():
         success is true if reached goal within tolerance, false otherwise
         """
         step = 0
-        while np.linalg.norm(self.robot_joint_pos - target_joint_pos) > tolerance:
+        while np.linalg.norm(self.robot_joint_pos - target_joint_pos) > tolerance\
+                or np.linalg.norm(self.robot_joint_velocities) > end_vel:
+            print(np.linalg.norm(self.robot_joint_pos - target_joint_pos))
             if max_steps is not None and step > max_steps:
                 return self.get_state(), False
 
@@ -98,6 +100,7 @@ class TableWorld():
 
     def _env_step(self, target_joint_pos, gripper_closed):
         """ run environment step and update state of self accordingly"""
+        # action = np.concatenate((target_joint_pos, target_joint_pos, [int(gripper_closed)]))
         action = np.concatenate((target_joint_pos, [int(gripper_closed)]))
         obs, r, term, trunc, info = self._env.step(action)
 
