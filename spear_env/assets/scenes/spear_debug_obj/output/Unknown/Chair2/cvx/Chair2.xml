@@ -1,0 +1,37 @@
+<mujoco model="Chair2">
+
+   <asset>
+       <mesh file="../../Chair2/Chair2_cvx.obj"/>
+       <mesh file="../../Chair2/cvx/Chair2001.obj"/>
+       <mesh file="../../Chair2/cvx/Chair2000.obj"/>
+       <mesh file="../../Chair2/cvx/Chair2002.obj"/>
+       <mesh file="../../Chair2/cvx/Chair2003.obj"/>
+       <mesh file="../../Chair2/cvx/Chair2007.obj"/>
+       <mesh file="../../Chair2/cvx/Chair2006.obj"/>
+       <mesh file="../../Chair2/cvx/Chair2004.obj"/>
+       <mesh file="../../Chair2/cvx/Chair2005.obj"/>
+   </asset>
+
+   <worldbody>
+       <body name="Chair2" pos="-2.3899998664855957 1.1999999284744263 0.0" quat="1.0 0.0 0.0 0.0">
+           <freejoint/>
+          <geom name="Chair2001_vis" mesh="Chair2001" class="visual"/>
+          <geom name="Chair2001_col" mesh="Chair2001" class="collision"/>
+          <geom name="Chair2000_vis" mesh="Chair2000" class="visual"/>
+          <geom name="Chair2000_col" mesh="Chair2000" class="collision"/>
+          <geom name="Chair2002_vis" mesh="Chair2002" class="visual"/>
+          <geom name="Chair2002_col" mesh="Chair2002" class="collision"/>
+          <geom name="Chair2003_vis" mesh="Chair2003" class="visual"/>
+          <geom name="Chair2003_col" mesh="Chair2003" class="collision"/>
+          <geom name="Chair2007_vis" mesh="Chair2007" class="visual"/>
+          <geom name="Chair2007_col" mesh="Chair2007" class="collision"/>
+          <geom name="Chair2006_vis" mesh="Chair2006" class="visual"/>
+          <geom name="Chair2006_col" mesh="Chair2006" class="collision"/>
+          <geom name="Chair2004_vis" mesh="Chair2004" class="visual"/>
+          <geom name="Chair2004_col" mesh="Chair2004" class="collision"/>
+          <geom name="Chair2005_vis" mesh="Chair2005" class="visual"/>
+          <geom name="Chair2005_col" mesh="Chair2005" class="collision"/>
+       </body>
+   </worldbody>
+
+</mujoco>

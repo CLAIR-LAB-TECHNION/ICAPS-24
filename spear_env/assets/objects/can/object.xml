@@ -1,0 +1,13 @@
+<mujoco model="can">
+    <asset>
+        <mesh file="meshes/can.msh" name="can_mesh"/>
+        <texture file="textures/soda.png" name="tex-can" type="2d"/>
+        <material name="coke" reflectance="0.7" texrepeat="5 5" texture="tex-can" texuniform="true"/>
+    </asset>
+    <worldbody>
+        <body name="object">
+            <geom pos="0 0 0" mesh="can_mesh" type="mesh" solimp="0.998 0.998 0.001" solref="0.001 1" density="100"
+                  friction="0.95 0.3 0.1" material="coke" group="0" condim="4"/>
+        </body>
+    </worldbody>
+</mujoco>

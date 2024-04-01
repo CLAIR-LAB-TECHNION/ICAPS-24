@@ -1,0 +1,13 @@
+<mujoco model="bread">
+    <asset>
+        <mesh file="meshes/bread.stl" name="bread_mesh" scale="0.8 0.8 0.8"/>
+        <texture file="textures/bread.png" type="2d" name="tex-bread"/>
+        <material name="bread" reflectance="0.7" texrepeat="15 15" texture="tex-bread" texuniform="true"/>
+    </asset>
+    <worldbody>
+        <body name="object">
+            <geom pos="0 0 0" mesh="bread_mesh" type="mesh" solimp="0.998 0.998 0.001" solref="0.001 1" density="50"
+                  friction="0.95 0.3 0.1" material="bread" group="0" condim="4"/>
+        </body>
+    </worldbody>
+</mujoco>

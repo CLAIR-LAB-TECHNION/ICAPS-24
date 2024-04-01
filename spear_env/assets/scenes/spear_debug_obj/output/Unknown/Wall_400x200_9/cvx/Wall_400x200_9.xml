@@ -1,0 +1,15 @@
+<mujoco model="Wall_400x200_9">
+
+   <asset>
+       <mesh file="../../Wall_400x200_9/Wall_400x200_9_cvx.obj"/>
+       <mesh file="../../Wall_400x200_9/cvx/Wall_400x200_9000.obj"/>
+   </asset>
+
+   <worldbody>
+       <body name="Wall_400x200_9" pos="2.0 5.0 0.0" quat="1.0 0.0 0.0 0.0">
+          <geom name="Wall_400x200_9000_vis" mesh="Wall_400x200_9000" class="visual"/>
+          <geom name="Wall_400x200_9000_col" mesh="Wall_400x200_9000" class="collision"/>
+       </body>
+   </worldbody>
+
+</mujoco>

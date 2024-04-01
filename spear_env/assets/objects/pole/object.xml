@@ -1,0 +1,8 @@
+<mujoco model="pole">
+   <worldbody>
+       <body name="pole" pos="2.5 1 .3" quat="0.70710678 0. 0. -0.70710678">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .3" rgba="0 0 1 1"/>
+        </body>
+  </worldbody>
+</mujoco>

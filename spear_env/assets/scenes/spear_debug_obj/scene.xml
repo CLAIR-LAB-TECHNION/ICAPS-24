@@ -1,0 +1,93 @@
+<mujoco model="spear debug obj">
+
+   <compiler angle="radian" balanceinertia="true" boundmass="0.1" autolimits="true" fusestatic="true" convexhull="false"/>/>
+
+   <option timestep="0.002" integrator="implicitfast" solver="Newton" collision="all" cone="pyramidal"/>
+
+   <size memory="1G"/>
+
+   <default>
+       <material specular="0" shininess="0.25"/>
+       <default class="visual">
+           <geom group="2" type="mesh" contype="0" conaffinity="0"/>
+       </default>
+       <default class="collision">
+           <geom group="3" type="mesh" priority="1" solimp="0.015 0.09 0.01" condim="6"/>
+       </default>
+   </default>
+
+  <include file="output/Unknown/Table0/cvx/Table0.xml"/>
+  <include file="output/Unknown/Wall_400x200_19/cvx/Wall_400x200_19.xml"/>
+  <include file="output/Unknown/Chair3/cvx/Chair3.xml"/>
+  <include file="output/Unknown/Wall_400x200_10/cvx/Wall_400x200_10.xml"/>
+  <include file="output/Unknown/Table1/cvx/Table1.xml"/>
+  <include file="output/Unknown/Chair2/cvx/Chair2.xml"/>
+  <include file="output/Unknown/Wall_400x200_11/cvx/Wall_400x200_11.xml"/>
+  <include file="output/Unknown/Wall_400x200_6/cvx/Wall_400x200_6.xml"/>
+  <include file="output/Unknown/Wall_400x200_1/cvx/Wall_400x200_1.xml"/>
+  <include file="output/Unknown/Wall_400x200_8/cvx/Wall_400x200_8.xml"/>
+  <include file="output/Unknown/Wall_400x200_9/cvx/Wall_400x200_9.xml"/>
+  <include file="output/Unknown/Wall_400x200_7/cvx/Wall_400x200_7.xml"/>
+  <include file="output/Unknown/Chair0/cvx/Chair0.xml"/>
+  <include file="output/Unknown/Chair1/cvx/Chair1.xml"/>
+  <include file="output/Unknown/Wall_400x200_12/cvx/Wall_400x200_12.xml"/>
+  <include file="output/Unknown/Cube0/cvx/Cube0.xml"/>
+  <include file="output/Unknown/Statue0/cvx/Statue0.xml"/>
+  <include file="output/Unknown/Wall_400x200_5/cvx/Wall_400x200_5.xml"/>
+  <include file="output/Unknown/Wall_400x200_4/cvx/Wall_400x200_4.xml"/>
+  <include file="output/Unknown/Wall_400x200_3/cvx/Wall_400x200_3.xml"/>
+
+   <visual>
+       <headlight diffuse="0.6 0.6 0.6"  ambient="0.3 0.3 0.3" specular="0 0 0"/>
+       <rgba haze="0.15 0.25 0.35 1"/>
+       <global azimuth="120" elevation="-20"/>
+   </visual>
+
+   <statistic center="0 0 .3" extent="1.2"/>
+
+   <asset>
+       <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+       <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300"/>
+       <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+   </asset>
+
+   <worldbody>
+       <light pos="0 0 1.5" dir="0 0 -1" directional="true"/>
+       <geom name="floor" size="0 0 0.05" type="plane" material="groundplane"/>
+
+       <body name="obstacle_0" pos="2.5 1 .3" quat="0.70710678 0. 0. -0.70710678">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .3" rgba="0 0 1 1"/>
+        </body>
+
+        <body name="obstacle_1" pos="2.5 0.3 0.3" quat="0.70710678 0. 0. -0.70710678">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .3" rgba="0 0 1 1"/>
+        </body>
+
+        <body name="obstacle_2" pos="2.5 -0.3 0.3" quat="0.70710678 0. 0. -0.70710678">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .3" rgba="0 0 1 1"/>
+        </body>
+
+        <body name="obstacle_3" pos="2.5 -1 0.3" quat="0.70710678 0. 0. -0.70710678">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .3" rgba="0 0 1 1"/>
+        </body>
+
+        <body name="pick_object_yellow" pos="0 -2 0.76">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .05" rgba="1 1 0 1"/>
+        </body>
+
+        <body name="pick_object_red" pos="0 -2.3 0.76">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .05" rgba="1 0 0 1"/>
+        </body>
+
+        <body name="pick_object_cyan" pos="0 -1.7 0.76">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .05" rgba="0 1 1 1"/>
+        </body>
+  </worldbody>
+</mujoco>

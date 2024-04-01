@@ -1,0 +1,19 @@
+<mujoco model="ball">
+
+    <worldbody>
+        <body name="ball">
+            <!-- three DOF for translation in all directions -->
+            <joint name="slide_x" type="slide" pos="0 0 0" axis="1 0 0" damping="1"/>
+            <joint name="slide_y" type="slide" pos="0 0 0" axis="0 1 0" damping="1"/>
+            <joint name="slide_z" type="slide" pos="0 0 0" axis="0 0 1" damping="1"/>
+            <geom type="sphere" pos="0 0 0" size=".1 .1 .1" rgba="0 0 .9 1"/>
+        </body>
+    </worldbody>
+
+    <actuator>
+        <!-- actuation for ball DOFs-->
+        <motor name="motor_x" joint="slide_x" gear="1" ctrlrange="-10 10" ctrllimited="true"/>
+        <motor name="motor_y" joint="slide_y" gear="1" ctrlrange="-10 10" ctrllimited="true"/>
+        <motor name="motor_z" joint="slide_z" gear="1" ctrlrange="-10 10" ctrllimited="true"/>
+    </actuator>
+</mujoco>

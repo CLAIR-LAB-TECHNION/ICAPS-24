@@ -1,0 +1,13 @@
+<mujoco model="lemon">
+    <asset>
+        <mesh file="meshes/lemon.msh" name="lemon_mesh" scale="1.5 1 1"/>
+        <texture file="textures/lemon.png" type="2d" name="tex-lemon"/>
+        <material name="lemon" reflectance="0.7" texrepeat="60 50" texture="tex-lemon" texuniform="true"/>
+    </asset>
+    <worldbody>
+        <body name="object">
+            <geom pos="0 0 0" mesh="lemon_mesh" type="mesh" solimp="0.998 0.998 0.001" solref="0.001 1" density="50"
+                  friction="0.95 0.3 0.1" material="lemon" group="0" condim="4"/>
+        </body>
+    </worldbody>
+</mujoco>

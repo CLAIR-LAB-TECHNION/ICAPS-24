@@ -1,0 +1,37 @@
+<mujoco model="Chair1">
+
+   <asset>
+       <mesh file="../../Chair1/Chair1_cvx.obj"/>
+       <mesh file="../../Chair1/cvx/Chair1006.obj"/>
+       <mesh file="../../Chair1/cvx/Chair1007.obj"/>
+       <mesh file="../../Chair1/cvx/Chair1005.obj"/>
+       <mesh file="../../Chair1/cvx/Chair1004.obj"/>
+       <mesh file="../../Chair1/cvx/Chair1000.obj"/>
+       <mesh file="../../Chair1/cvx/Chair1001.obj"/>
+       <mesh file="../../Chair1/cvx/Chair1003.obj"/>
+       <mesh file="../../Chair1/cvx/Chair1002.obj"/>
+   </asset>
+
+   <worldbody>
+       <body name="Chair1" pos="4.039999961853027 1.1999999284744263 0.0" quat="1.0 0.0 0.0 0.0">
+           <freejoint/>
+          <geom name="Chair1006_vis" mesh="Chair1006" class="visual"/>
+          <geom name="Chair1006_col" mesh="Chair1006" class="collision"/>
+          <geom name="Chair1007_vis" mesh="Chair1007" class="visual"/>
+          <geom name="Chair1007_col" mesh="Chair1007" class="collision"/>
+          <geom name="Chair1005_vis" mesh="Chair1005" class="visual"/>
+          <geom name="Chair1005_col" mesh="Chair1005" class="collision"/>
+          <geom name="Chair1004_vis" mesh="Chair1004" class="visual"/>
+          <geom name="Chair1004_col" mesh="Chair1004" class="collision"/>
+          <geom name="Chair1000_vis" mesh="Chair1000" class="visual"/>
+          <geom name="Chair1000_col" mesh="Chair1000" class="collision"/>
+          <geom name="Chair1001_vis" mesh="Chair1001" class="visual"/>
+          <geom name="Chair1001_col" mesh="Chair1001" class="collision"/>
+          <geom name="Chair1003_vis" mesh="Chair1003" class="visual"/>
+          <geom name="Chair1003_col" mesh="Chair1003" class="collision"/>
+          <geom name="Chair1002_vis" mesh="Chair1002" class="visual"/>
+          <geom name="Chair1002_col" mesh="Chair1002" class="collision"/>
+       </body>
+   </worldbody>
+
+</mujoco>

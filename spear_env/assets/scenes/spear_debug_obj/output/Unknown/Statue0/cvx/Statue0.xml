@@ -1,0 +1,37 @@
+<mujoco model="Statue0">
+
+   <asset>
+       <mesh file="../../Statue0/Statue0_cvx.obj"/>
+       <mesh file="../../Statue0/cvx/Statue0007.obj"/>
+       <mesh file="../../Statue0/cvx/Statue0006.obj"/>
+       <mesh file="../../Statue0/cvx/Statue0004.obj"/>
+       <mesh file="../../Statue0/cvx/Statue0005.obj"/>
+       <mesh file="../../Statue0/cvx/Statue0001.obj"/>
+       <mesh file="../../Statue0/cvx/Statue0000.obj"/>
+       <mesh file="../../Statue0/cvx/Statue0002.obj"/>
+       <mesh file="../../Statue0/cvx/Statue0003.obj"/>
+   </asset>
+
+   <worldbody>
+       <body name="Statue0" pos="3.490000009536743 0.0 0.5699999928474426" quat="1.0 0.0 0.0 0.0">
+           <freejoint/>
+          <geom name="Statue0007_vis" mesh="Statue0007" class="visual"/>
+          <geom name="Statue0007_col" mesh="Statue0007" class="collision"/>
+          <geom name="Statue0006_vis" mesh="Statue0006" class="visual"/>
+          <geom name="Statue0006_col" mesh="Statue0006" class="collision"/>
+          <geom name="Statue0004_vis" mesh="Statue0004" class="visual"/>
+          <geom name="Statue0004_col" mesh="Statue0004" class="collision"/>
+          <geom name="Statue0005_vis" mesh="Statue0005" class="visual"/>
+          <geom name="Statue0005_col" mesh="Statue0005" class="collision"/>
+          <geom name="Statue0001_vis" mesh="Statue0001" class="visual"/>
+          <geom name="Statue0001_col" mesh="Statue0001" class="collision"/>
+          <geom name="Statue0000_vis" mesh="Statue0000" class="visual"/>
+          <geom name="Statue0000_col" mesh="Statue0000" class="collision"/>
+          <geom name="Statue0002_vis" mesh="Statue0002" class="visual"/>
+          <geom name="Statue0002_col" mesh="Statue0002" class="collision"/>
+          <geom name="Statue0003_vis" mesh="Statue0003" class="visual"/>
+          <geom name="Statue0003_col" mesh="Statue0003" class="collision"/>
+       </body>
+   </worldbody>
+
+</mujoco>

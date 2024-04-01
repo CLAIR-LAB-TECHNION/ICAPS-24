@@ -1,0 +1,16 @@
+<mujoco model="Cube0">
+
+   <asset>
+       <mesh file="../../Cube0/Cube0_cvx.obj"/>
+       <mesh file="../../Cube0/cvx/Cube0000.obj"/>
+   </asset>
+
+   <worldbody>
+       <body name="Cube0" pos="3.2200000286102295 0.0 0.6700000166893005" quat="1.0 0.0 0.0 0.0">
+           <freejoint/>
+          <geom name="Cube0000_vis" mesh="Cube0000" class="visual"/>
+          <geom name="Cube0000_col" mesh="Cube0000" class="collision"/>
+       </body>
+   </worldbody>
+
+</mujoco>

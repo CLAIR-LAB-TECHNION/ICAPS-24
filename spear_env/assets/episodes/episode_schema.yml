@@ -1,0 +1,33 @@
+definitions:
+  episode:
+    type: object
+    properties:
+      scene: string
+      robot: string
+      task_type: string
+      task_params: object
+
+type: object
+properties:
+  - globals:
+      type: object
+  - episodes:
+      type: array
+      items:
+        type: object
+        properties:
+          task_params:
+            type: object
+            properties:
+              obj_poses:
+                type: object
+                properties:
+                  red_box:
+                    type: object
+                    properties:
+                      goal_com:
+                        type: array
+                        items:
+                          type: number
+                          minimum: -1.0
+                          maximum: 1.0

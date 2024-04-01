@@ -1,0 +1,80 @@
+<mujoco model="carryworld">
+    <statistic center="0.3 0 0.4" extent="0.8"/>
+
+    <visual>
+        <headlight diffuse="0.6 0.6 0.6" ambient="0.1 0.1 0.1" specular="0 0 0"/>
+        <rgba haze="0.15 0.25 0.35 1"/>
+        <global azimuth="120" elevation="-20"/>
+    </visual>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+        <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
+                 markrgb="0.8 0.8 0.8" width="300" height="300"/>
+        <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+
+    </asset>
+
+    <worldbody>
+        <light pos="0 0 1.5" dir="0 0 -1" directional="true"/>
+        <geom name="floor" size="0 0 0.05" type="plane" material="groundplane"/>
+
+        <body name="table_left" pos="0.0 -2 0">
+            <geom name="table_left_top" type="box" size="1 .7 .01" pos="0 0 .7"/>
+            <geom name="table_left_leg_1" type="cylinder" size=".01 .7" pos=".85 -.55 -.0" euler="0 0 0"/>
+            <geom name="table_left_leg_2" type="cylinder" size=".01 .7" pos=".85 .55 -.0" euler="0 0 0"/>
+            <geom name="table_left_leg_3" type="cylinder" size=".01 .7" pos="-.85 -.55 -.0" euler="0 0 0"/>
+            <geom name="table_left_leg_4" type="cylinder" size=".01 .7" pos="-.85 .55 -.0" euler="0 0 0"/>
+        </body>
+
+        <body name="table_right" pos="0 2 0">
+            <geom name="table_right_top" type="box" size="1 .7 .01" pos="0 0 .7"/>
+            <geom name="table_right_leg_1" type="cylinder" size=".01 .7" pos=".85 -.55 -.0" euler="0 0 0"/>
+            <geom name="table_right_leg_2" type="cylinder" size=".01 .7" pos=".85 .55 -.0" euler="0 0 0"/>
+            <geom name="table_right_leg_3" type="cylinder" size=".01 .7" pos="-.85 -.55 -.0" euler="0 0 0"/>
+            <geom name="table_right_leg_4" type="cylinder" size=".01 .7" pos="-.85 .55 -.0" euler="0 0 0"/>
+        </body>
+
+
+        <body name="obstacle_0" pos="1 0 .3" quat="0.70710678 0. 0. -0.70710678">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .3" rgba="0 0 1 1"/>
+        </body>
+
+        <body name="obstacle_1" pos="0 1 0.3" quat="0.70710678 0. 0. -0.70710678">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .3" rgba="0 0 1 1"/>
+        </body>
+
+        <body name="obstacle_2" pos="-1 0 0.3" quat="0.70710678 0. 0. -0.70710678">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .3" rgba="0 0 1 1"/>
+        </body>
+
+        <body name="obstacle_3" pos="0 -1 0.3" quat="0.70710678 0. 0. -0.70710678">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .3" rgba="0 0 1 1"/>
+        </body>
+
+        <body name="pick_object_yellow" pos="0 -2 0.76">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .05" rgba="1 1 0 1"/>
+        </body>
+
+        <body name="pick_object_red" pos="0 -2.3 0.76">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .05" rgba="1 0 0 1"/>
+        </body>
+
+        <body name="pick_object_cyan" pos="0 -1.7 0.76">
+            <freejoint/>
+            <geom type="box" size=".05 .05 .05" rgba="0 1 1 1"/>
+        </body>
+
+    </worldbody>
+
+</mujoco>
+
+
+
+

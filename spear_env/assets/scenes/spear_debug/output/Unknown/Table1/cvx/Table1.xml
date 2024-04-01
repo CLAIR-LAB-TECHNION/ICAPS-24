@@ -1,0 +1,37 @@
+<mujoco model="Table1">
+
+   <asset>
+       <mesh file="../../Table1/Table1_cvx.obj"/>
+       <mesh file="../../Table1/cvx/Table1004.obj"/>
+       <mesh file="../../Table1/cvx/Table1005.obj"/>
+       <mesh file="../../Table1/cvx/Table1007.obj"/>
+       <mesh file="../../Table1/cvx/Table1006.obj"/>
+       <mesh file="../../Table1/cvx/Table1002.obj"/>
+       <mesh file="../../Table1/cvx/Table1003.obj"/>
+       <mesh file="../../Table1/cvx/Table1001.obj"/>
+       <mesh file="../../Table1/cvx/Table1000.obj"/>
+   </asset>
+
+   <worldbody>
+       <body name="Table1" pos="-0.9199999570846558 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+           <freejoint/>
+          <geom name="Table1004_vis" mesh="Table1004" class="visual"/>
+          <geom name="Table1004_col" mesh="Table1004" class="collision"/>
+          <geom name="Table1005_vis" mesh="Table1005" class="visual"/>
+          <geom name="Table1005_col" mesh="Table1005" class="collision"/>
+          <geom name="Table1007_vis" mesh="Table1007" class="visual"/>
+          <geom name="Table1007_col" mesh="Table1007" class="collision"/>
+          <geom name="Table1006_vis" mesh="Table1006" class="visual"/>
+          <geom name="Table1006_col" mesh="Table1006" class="collision"/>
+          <geom name="Table1002_vis" mesh="Table1002" class="visual"/>
+          <geom name="Table1002_col" mesh="Table1002" class="collision"/>
+          <geom name="Table1003_vis" mesh="Table1003" class="visual"/>
+          <geom name="Table1003_col" mesh="Table1003" class="collision"/>
+          <geom name="Table1001_vis" mesh="Table1001" class="visual"/>
+          <geom name="Table1001_col" mesh="Table1001" class="collision"/>
+          <geom name="Table1000_vis" mesh="Table1000" class="visual"/>
+          <geom name="Table1000_col" mesh="Table1000" class="collision"/>
+       </body>
+   </worldbody>
+
+</mujoco>

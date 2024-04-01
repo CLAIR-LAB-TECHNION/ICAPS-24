@@ -1,0 +1,21 @@
+<mujoco model="paddleworld">
+    <!-- objects are floating around in space-->
+    <option gravity="0 0 0" />
+
+    <asset>
+        <!-- bright skybox background for rendering visibility-->
+        <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .8 1" width="256"
+            height="256" />
+    </asset>
+    <worldbody>
+        <!-- lighting for visibility-->
+        <light diffuse=".5 .5 .5" pos="0 0 3" dir="0 0 -1" />
+
+        <!-- the ball to be pushed to the goal position-->
+        <body name="ball" pos="0 0 0">
+            <joint name='free' type="free" damping="1" />
+            <geom type="sphere" pos="0 0 0" size=".1 .1 .1" rgba="0 0 .9 1" />
+        </body>
+    </worldbody>
+
+</mujoco>
