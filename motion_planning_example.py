@@ -63,14 +63,14 @@ def plan_and_move_to_pose(env, planner, last_obs, goal_pos, goal_R, max_time=30,
 
 
 if __name__ == '__main__':
-    mp_vis = False
+    mp_vis = True
 
     env = spear_env.from_cfg(cfg=env_cfg, render_mode="human", frame_skip=5)
 
-    planner = TableWorldMotionPlanner(eps=0.05)
+    planner = TableWorldMotionPlanner(eps=0.02)
     obs, info = env.reset()
 
-    here:
+    # here:
     # TODO: wrapper and use env.agent.entity.set_state(velocity=<clipped_velocity>)
 
     obs, _, _, _, _, = move_to_config(env, [0, -1.57, 0, 0, 0, 0])

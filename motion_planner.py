@@ -42,10 +42,10 @@ class TableWorldMotionPlanner():
 
         self.planning_config = {  # TODO: configurable parameters?
                                 "type": "lazyrrg*",
-                                # "type": "rrt",
+                                # "type": "rrt*",
                                 "bidirectional": True,
                                 "connectionThreshold": 20.0,
-                                # "shortcut": True,
+                                # "shortcut": True, # only for rrt
         }
 
     def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=30):
