@@ -21,7 +21,7 @@ env_cfg = dict(
 INIT_CONFIG = np.array([0, -1.57, 0, 0, 0, 0])
 INIT_MAX_VELOCITY = np.array([2, 2, 2, 2, 2, 2])
 
-class TableWorld():
+class BlockWorld():
     def __init__(self):
         self._env = spear_env.from_cfg(cfg=env_cfg, render_mode="human", frame_skip=5)
         obs, info = self._env.reset()  # once, for info, later again

@@ -11,7 +11,7 @@ from klampt.plan import robotplanning
 from klampt.model import ik
 
 
-class TableWorldMotionPlanner():
+class BlockWorldMotionPlanner():
     robot_height = 0.903 + 0.163 - 0.089159
     # 0.903 is the height of the robot mount, 0.163 is the height of the shift of shoulder link in mujoco,
     # 0.089159 is the height of shoulder link in urdf for klampt
@@ -31,11 +31,11 @@ class TableWorldMotionPlanner():
 
         self.robot = self.world.robot(0)
 
-        # constraint joint limits for faster planning. joints 2 is base ration, don't need entire 350,
+        # constraint joint limits for faster planning. joint 2 is base rotation, don't need entire 360,
         # joint 3 is shoulder lift, outside the limits will probably result table collision anyway.
         # joint 4 has 2 pi range anyway. all the others can do fine with 3pi range
-        limits_l = [0, 0, -np.pi/3, -4, -np.pi, -3*np.pi/2, -3*np.pi/2, -3*np.pi/2, 0, 0]
-        limits_h = [0, 0, 4*np.pi/3, 0.5, np.pi, 3*np.pi/2, 3*np.pi/2, 3*np.pi/2, 0, 0]
+        limits_l = [0, 0, -np.pi/2, -4.5, -np.pi, -3*np.pi/2, -3*np.pi/2, -3*np.pi/2, 0, 0]
+        limits_h = [0, 0, 3*np.pi/2, 1., np.pi, 3*np.pi/2, 3*np.pi/2, 3*np.pi/2, 0, 0]
         self.robot.setJointLimits(limits_l, limits_h)
 
         self.ee_link = self.robot.link("ee_link")
