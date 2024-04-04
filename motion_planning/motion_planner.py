@@ -26,7 +26,7 @@ class BlockWorldMotionPlanner():
         self.eps = eps
 
         self.world = WorldModel()
-        self.world.readFile("klampt_world.xml")
+        self.world.readFile("./motion_planning/klampt_world.xml")
         self._build_world()
 
         self.robot = self.world.robot(0)

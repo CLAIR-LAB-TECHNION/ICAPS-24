@@ -1,6 +1,6 @@
 import numpy as np
-from block_world import BlockWorld
-from motion_planner import BlockWorldMotionPlanner
+from block_world.block_world import BlockWorld
+from motion_planning.motion_planner import BlockWorldMotionPlanner
 
 
 facing_down_R = [[0, 0, -1], [0, 1, 0], [1, 0, 0]]

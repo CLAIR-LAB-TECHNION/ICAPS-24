@@ -1,3 +1,5 @@
+""" a wrapper around spear env to simplify and fix some issues with the environment """
+
 import numpy as np
 import spear_env
 from spear_env.tasks.null_task import NullTask
