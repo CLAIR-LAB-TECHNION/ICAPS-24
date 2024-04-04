@@ -3,7 +3,7 @@
 import numpy as np
 import spear_env
 from spear_env.tasks.null_task import NullTask
-from PID_controller import PIDController
+from block_world.PID_controller import PIDController
 
 
 env_cfg = dict(
