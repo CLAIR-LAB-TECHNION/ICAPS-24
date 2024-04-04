@@ -4,6 +4,7 @@ import numpy as np
 import spear_env
 from spear_env.tasks.null_task import NullTask
 from block_world.PID_controller import PIDController
+from block_world.grasp_manager import GraspManager
 
 
 env_cfg = dict(
@@ -51,6 +52,8 @@ class BlockWorld():
         self.robot_joint_velocities = None  # --""--
         self.gripper_state_closed = False  # --""--
         self.max_joint_velocities = INIT_MAX_VELOCITY
+
+        self._grasp_manager = GraspManager(self._mj_model, self._mj_data)
 
         # dt = self._mj_model.opt.timestep * frame_skip
         # self._pid_controller = PIDController(kp, ki, kd, dt)
