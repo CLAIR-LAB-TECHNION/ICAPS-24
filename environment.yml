@@ -1,0 +1,19 @@
+name: spear-_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pytorch::pytorch
+  - tensorboard
+  - scipy
+  - tqdm
+  - rich
+  - pyyaml
+  - jupyterlab
+  - ipywidgets
+  - pip
+  - pip:
+      - gymnasium[mujoco]
+      - stable-baselines3>=2.0.0
+      - dm_control
