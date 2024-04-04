@@ -32,6 +32,7 @@ INIT_MAX_VELOCITY = np.array([2, 2, 2, 2, 2, 2])
 # kp = [1500, 1500, 1500, 300, 300, 300]
 # kd = [200, 200, 200, 50, 50, 50]
 # ki = [20, 100, 100, 20, 20, 20]
+# code PID might work with shorter timestep...
 
 
 frame_skip = 5
