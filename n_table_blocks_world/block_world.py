@@ -11,7 +11,7 @@ from mujoco import mj_loadAllPluginLibraries
 
 env_cfg = dict(
     scene=dict(
-        resource='tableworld',
+        resource='3tableblocksworld',
         render_camera='top-right'
     ),
     robot=dict(
@@ -93,6 +93,8 @@ class NTableBlocksWorld():
         else:
             self._grasp_manager.release_object()
 
+        self._env.render()
+
         return self.get_state()
 
     def get_state(self):
@@ -100,7 +102,7 @@ class NTableBlocksWorld():
         return self.robot_joint_pos
 
     def get_object_pos(self, name: str):
-        return self._mj_model.body(name).pos
+        return self._object_manager.get_object_pos(name)
 
     def move_to(self, target_joint_pos, tolerance=0.05, end_vel=0.1, max_steps=None):
         """
@@ -158,4 +160,3 @@ class NTableBlocksWorld():
         self.robot_joint_velocities = obs['robot_state'][6:12]
         self.gripper_state_closed = gripper_closed
 
-        self._env.render()

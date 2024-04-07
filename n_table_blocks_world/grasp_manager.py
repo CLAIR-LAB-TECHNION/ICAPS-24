@@ -3,7 +3,7 @@ from n_table_blocks_world.object_manager import ObjectManager
 
 
 class GraspManager():
-    def __init__(self, mj_model, mj_data, object_manager: ObjectManager, min_grasp_distance=0.1):
+    def __init__(self, mj_model, mj_data, object_manager: ObjectManager, min_grasp_distance=0.15):
         self._mj_model = mj_model
         self._mj_data = mj_data
         self.object_manager = object_manager
@@ -54,9 +54,14 @@ class GraspManager():
         if self.attatched_object_name is None:
             return
 
-        object_jntadr = self._mj_model.body(self.attatched_object_name).jntadr[0]
-
         target_position = self._ee_mj_data.xpos
         target_orientation = self._ee_mj_data.xquat
+        target_velocities = self._ee_mj_data.cvel
+        target_velocities = np.zeros(6)
+
+        # add shift to target position to make sure object is a bit below end effector, but in ee frame
+        target_position_in_ee = np.array([0, 0, 0.01])
+        target_position = target_position + self._ee_mj_data.xmat.reshape(3, 3).T @ target_position_in_ee
 
         self.object_manager.set_object_pose(self.attatched_object_name, target_position, target_orientation)
+        self.object_manager.set_object_vel(self.attatched_object_name, target_velocities)

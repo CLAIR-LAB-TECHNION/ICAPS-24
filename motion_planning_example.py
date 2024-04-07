@@ -12,38 +12,51 @@ if __name__ == '__main__':
 
     env = NTableBlocksWorld()
     planner = NTableBlocksWorldMotionPlanner(env)
+    red_box_pos = env.get_object_pos('red box')
+    yellow_box_pos = env.get_object_pos('yellow box')
+    purple_box_pos = env.get_object_pos('purple box')
 
     robot_joint_pos = env.reset()
     # run simulation for few steps:
     for i in range(10):
         env.step(robot_joint_pos)
 
-    red_box_pos = env.get_object_pos('red_box') + np.array([0, 0, 0.02])  # TODO + box size
     above_red_box_pos = red_box_pos + np.array([0, 0, 0.1])
     path = planner.plan_from_config_to_pose(robot_joint_pos, above_red_box_pos, facing_down_R)
-
     for j in path[1:]:
         env.move_to(j, tolerance=tol, end_vel=vel)
+    env.set_gripper(closed=True)
 
-    red_box_grasp_config = planner.ik_solve(red_box_pos, facing_down_R, env.robot_joint_pos)
-    env.move_to(red_box_grasp_config, tolerance=tol, end_vel=vel)
-    for i in range(10):
-        env.set_gripper(closed=True)
+    # red_box_grasp_config = planner.ik_solve(red_box_pos, facing_down_R, env.robot_joint_pos)
+    # env.move_to(red_box_grasp_config, tolerance=tol, end_vel=vel)
 
-    env.max_joint_velocities = 0.5
-
-    purple_box_pos = env.get_object_pos('purple box')
     above_purple_box_pos = purple_box_pos + np.array([0, 0, 0.1])
     joint_state = env.robot_joint_pos
     path = planner.plan_from_config_to_pose(joint_state, above_purple_box_pos, facing_down_R)
     for j in path:
         env.move_to(j, tolerance=tol, end_vel=vel)
+    env.set_gripper(closed=False)
 
+    above_yellow_box_pos = yellow_box_pos + np.array([0, 0, 0.1])
+    joint_state = env.robot_joint_pos
+    path = planner.plan_from_config_to_pose(joint_state, above_yellow_box_pos, facing_down_R)
+    for j in path:
+        env.move_to(j, tolerance=tol, end_vel=vel)
+    env.set_gripper(closed=True)
+
+    red_box_new_pos = env.get_object_pos('red box')
+    above_tower_pos = red_box_new_pos + np.array([0, 0, 0.1])
+    joint_state = env.robot_joint_pos
+    path = planner.plan_from_config_to_pose(joint_state, above_tower_pos, facing_down_R)
+    for j in path:
+        env.move_to(j, tolerance=tol, end_vel=vel)
     env.set_gripper(closed=False)
 
     js = env.robot_joint_pos
+    # move robot to home position
+    home_js = np.array([0, -1.57, 0, 0, 0, 0])
     for i in range(1000):
-        env.step(js)
+        env.step(home_js)
 
 
 
