@@ -1,20 +1,24 @@
 import numpy as np
-from n_table_blocks_world.block_world import NTableBlocksWorld
+from n_table_blocks_world.n_table_blocks_world import NTableBlocksWorld
 from motion_planning.motion_planner import NTableBlocksWorldMotionPlanner
 
 
 facing_down_R = [[0, 0, -1], [0, 1, 0], [1, 0, 0]]
 
+
 if __name__ == '__main__':
-    mp_vis = False
+    mp_vis = True
     tol = 0.05
     vel = 0.1
 
     env = NTableBlocksWorld()
     planner = NTableBlocksWorldMotionPlanner(env)
-    red_box_pos = env.get_object_pos('red box')
-    yellow_box_pos = env.get_object_pos('yellow box')
-    purple_box_pos = env.get_object_pos('purple box')
+    if mp_vis:
+        planner.open_vis()
+
+    red_box_pos = env.get_object_pos('block 1 red')
+    yellow_box_pos = env.get_object_pos('block 2 yellow')
+    purple_box_pos = env.get_object_pos('block 3 cyan')
 
     robot_joint_pos = env.reset()
     # run simulation for few steps:
@@ -23,6 +27,8 @@ if __name__ == '__main__':
 
     above_red_box_pos = red_box_pos + np.array([0, 0, 0.1])
     path = planner.plan_from_config_to_pose(robot_joint_pos, above_red_box_pos, facing_down_R)
+    if mp_vis:
+        planner.show_path_vis(path)
     for j in path[1:]:
         env.move_to(j, tolerance=tol, end_vel=vel)
     env.set_gripper(closed=True)
@@ -36,6 +42,8 @@ if __name__ == '__main__':
     for j in path:
         env.move_to(j, tolerance=tol, end_vel=vel)
     env.set_gripper(closed=False)
+    for i in range(10):
+        env.step(env.robot_joint_pos)
 
     above_yellow_box_pos = yellow_box_pos + np.array([0, 0, 0.1])
     joint_state = env.robot_joint_pos
@@ -44,15 +52,16 @@ if __name__ == '__main__':
         env.move_to(j, tolerance=tol, end_vel=vel)
     env.set_gripper(closed=True)
 
-    red_box_new_pos = env.get_object_pos('red box')
+    red_box_new_pos = env.get_object_pos('block 1 red')
     above_tower_pos = red_box_new_pos + np.array([0, 0, 0.1])
     joint_state = env.robot_joint_pos
     path = planner.plan_from_config_to_pose(joint_state, above_tower_pos, facing_down_R)
     for j in path:
         env.move_to(j, tolerance=tol, end_vel=vel)
     env.set_gripper(closed=False)
+    for i in range(10):
+        env.step(env.robot_joint_pos)
 
-    js = env.robot_joint_pos
     # move robot to home position
     home_js = np.array([0, -1.57, 0, 0, 0, 0])
     for i in range(1000):

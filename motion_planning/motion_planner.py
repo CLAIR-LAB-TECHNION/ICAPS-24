@@ -41,10 +41,10 @@ class NTableBlocksWorldMotionPlanner():
         self.ee_link = self.robot.link("ee_link")
 
         self.planning_config = {  # TODO: configurable parameters?
-                                "type": "lazyrrg*",
-                                # "type": "rrt*",
+                                # "type": "lazyrrg*",
+                                "type": "rrt*",
                                 "bidirectional": True,
-                                "connectionThreshold": 20.0,
+                                "connectionThreshold": 30.0,
                                 # "shortcut": True, # only for rrt
         }
 
@@ -190,7 +190,8 @@ class NTableBlocksWorldMotionPlanner():
         self.robot.setConfig(start_config)
 
         planner = robotplanning.plan_to_config(self.world, self.robot, goal_config,
-                                               extraConstraints=[space_reduction_constraint], **self.planning_config)
+                                               # extraConstraints=[space_reduction_constraint],
+                                               **self.planning_config)
         planner.space.eps = self.eps
         return self._plan(planner, max_time)
 
@@ -214,8 +215,9 @@ class NTableBlocksWorldMotionPlanner():
     def _build_world(self):
         """ build the obstacles in the world """
         self._add_box_geom("floor", (5, 5, 0.01), [0, 0, 0], [0.1, 0.1, 0.1, 1])
-        self._add_box_geom("table_left", (0.74, 0.74, 0.01), [0, -0.6, 0.7], [0.5, 0.5, 0.5, 0.8])
-        self._add_box_geom("table_right", (0.74, 0.74, 0.01), [0, 0.6, 0.7], [0.5, 0.5, 0.5, 0.8])
+        self._add_box_geom("table_left", (0.60, 0.60, 0.01), [0, -0.6, 0.7], [0.5, 0.5, 0.5, 0.8])
+        self._add_box_geom("table_right", (0.60, 0.60, 0.01), [0, 0.6, 0.7], [0.5, 0.5, 0.5, 0.8])
+        self._add_box_geom("table_front", (0.60, 0.60, 0.01), [0.6, 0, 0.7], [0.5, 0.5, 0.5, 0.8])
         self._add_box_geom("purpule_box", (0.1, 0.1, 0.02), [-0.2, 0.5, 0.72], [0.5, 0.1, 0.5, 1])
         self._add_box_geom("robot_mount_approx", size=(0.45, 0.25, self.mount_top_base),
                            center=[-0.1, 0, self.mount_top_base / 2], color=[0.5, 0.5, 0.5, 1])

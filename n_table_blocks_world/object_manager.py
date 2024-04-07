@@ -12,7 +12,7 @@ class ObjectManager:
         all_joint_names = [self._mj_model.joint(i).name for i in range(self._mj_model.njnt)]
 
         # all bodies that ends with "box"
-        self.object_names = [name for name in all_joint_names if name.endswith("box")]
+        self.object_names = [name for name in all_joint_names if name.startswith("block")]
         self.objects_mjdata_dict = {name: self._mj_model.joint(name) for name in self.object_names}
 
     def get_object_pos(self, name: str):
