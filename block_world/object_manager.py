@@ -15,10 +15,10 @@ class ObjectManager:
         self.objects_jntadrs_dict = {name: self._mj_model.body(name).jntadr[0] for name in self.object_names}
 
     def get_object_pos(self, name: str):
-        return self._mj_data.body(name).pos
+        return self._mj_data.body(name).xpos
 
     def get_object_quat(self, name: str):
-        return self._mj_data.body(name).quat
+        return self._mj_data.body(name).xquat
 
     def set_object_pose(self, name: str, pos, quat):
         adr = self.objects_jntadrs_dict[name]

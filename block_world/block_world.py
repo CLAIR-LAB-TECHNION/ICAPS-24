@@ -5,6 +5,8 @@ import spear_env
 from spear_env.tasks.null_task import NullTask
 from block_world.PID_controller import PIDController
 from block_world.grasp_manager import GraspManager
+from block_world.object_manager import ObjectManager
+from mujoco import mj_loadAllPluginLibraries
 
 
 env_cfg = dict(
@@ -20,7 +22,6 @@ env_cfg = dict(
     ),
     task=NullTask,
 )
-
 
 INIT_CONFIG = np.array([0, -1.57, 0, 0, 0, 0])
 INIT_MAX_VELOCITY = np.array([2, 2, 2, 2, 2, 2])
@@ -40,6 +41,7 @@ INIT_MAX_VELOCITY = np.array([2, 2, 2, 2, 2, 2])
 
 frame_skip = 5
 
+
 class BlockWorld():
     def __init__(self):
         self._env = spear_env.from_cfg(cfg=env_cfg, render_mode="human", frame_skip=frame_skip)
@@ -53,7 +55,8 @@ class BlockWorld():
         self.gripper_state_closed = False  # --""--
         self.max_joint_velocities = INIT_MAX_VELOCITY
 
-        self._grasp_manager = GraspManager(self._mj_model, self._mj_data)
+        self._object_manager = ObjectManager(self._mj_model, self._mj_data)
+        self._grasp_manager = GraspManager(self._mj_model, self._mj_data, self._object_manager, min_grasp_distance=0.1)
 
         # dt = self._mj_model.opt.timestep * frame_skip
         # self._pid_controller = PIDController(kp, ki, kd, dt)
@@ -81,9 +84,19 @@ class BlockWorld():
 
         self._env_step(target_joint_pos, gripper_closed)
         self._clip_joint_velocities()
+
+        if gripper_closed:
+            if self._grasp_manager.attatched_object_name is not None:
+                self._grasp_manager.update_grasped_object_pose()
+            else:
+                self._grasp_manager.grasp_nearest_object_if_close_enough()
+        else:
+            self._grasp_manager.release_object()
+
         return self.get_state()
 
     def get_state(self):
+        # TODO: add blocks state and gripper state
         return self.robot_joint_pos
 
     def get_object_pos(self, name: str):
@@ -102,7 +115,7 @@ class BlockWorld():
         # self._pid_controller.reset_endpoint(target_joint_pos)
 
         step = 0
-        while np.linalg.norm(self.robot_joint_pos - target_joint_pos) > tolerance\
+        while np.linalg.norm(self.robot_joint_pos - target_joint_pos) > tolerance \
                 or np.linalg.norm(self.robot_joint_velocities) > end_vel:
             if max_steps is not None and step > max_steps:
                 return self.get_state(), False
@@ -128,8 +141,17 @@ class BlockWorld():
 
     def _env_step(self, target_joint_pos, gripper_closed):
         """ run environment step and update state of self accordingly"""
-        # joint_control = self._pid_controller.control(self.robot_joint_pos)
-        action = np.concatenate((target_joint_pos, [int(gripper_closed)]))
+
+        # joint_control = self._pid_controller.control(self.robot_joint_pos)  # would be relevant if we change to force
+        # control and use PID controller, but we are using position control right now.
+
+        # gripper control for the environment, which is the last element in the control vector is completely
+        # ignored right now, instead we attach the nearest graspable object to the end effector and maintain it
+        # with the grasp manager, outside the scope of this method.
+
+        # action = np.concatenate((target_joint_pos, [int(gripper_closed)])) # would have been if grasping worked
+        action = np.concatenate((target_joint_pos, [0]))
+
         obs, r, term, trunc, info = self._env.step(action)
 
         self.robot_joint_pos = obs['robot_state'][:6]
@@ -137,5 +159,3 @@ class BlockWorld():
         self.gripper_state_closed = gripper_closed
 
         self._env.render()
-
-

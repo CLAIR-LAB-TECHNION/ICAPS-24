@@ -30,7 +30,7 @@ if __name__ == '__main__':
     for i in range(10):
         env.set_gripper(closed=True)
 
-    env.max_joint_velocities = 0.1
+    env.max_joint_velocities = 0.5
 
     purple_box_pos = env.get_object_pos('purple box')
     above_purple_box_pos = purple_box_pos + np.array([0, 0, 0.1])
