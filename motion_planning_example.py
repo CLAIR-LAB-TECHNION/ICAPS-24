@@ -1,6 +1,6 @@
 import numpy as np
-from block_world.block_world import BlockWorld
-from motion_planning.motion_planner import BlockWorldMotionPlanner
+from n_table_blocks_world.block_world import NTableBlocksWorld
+from motion_planning.motion_planner import NTableBlocksWorldMotionPlanner
 
 
 facing_down_R = [[0, 0, -1], [0, 1, 0], [1, 0, 0]]
@@ -10,8 +10,8 @@ if __name__ == '__main__':
     tol = 0.05
     vel = 0.1
 
-    env = BlockWorld()
-    planner = BlockWorldMotionPlanner(env)
+    env = NTableBlocksWorld()
+    planner = NTableBlocksWorldMotionPlanner(env)
 
     robot_joint_pos = env.reset()
     # run simulation for few steps:

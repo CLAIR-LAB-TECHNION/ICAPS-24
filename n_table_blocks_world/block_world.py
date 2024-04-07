@@ -3,9 +3,9 @@
 import numpy as np
 import spear_env
 from spear_env.tasks.null_task import NullTask
-from block_world.PID_controller import PIDController
-from block_world.grasp_manager import GraspManager
-from block_world.object_manager import ObjectManager
+from n_table_blocks_world.PID_controller import PIDController
+from n_table_blocks_world.grasp_manager import GraspManager
+from n_table_blocks_world.object_manager import ObjectManager
 from mujoco import mj_loadAllPluginLibraries
 
 
@@ -42,7 +42,7 @@ INIT_MAX_VELOCITY = np.array([2, 2, 2, 2, 2, 2])
 frame_skip = 5
 
 
-class BlockWorld():
+class NTableBlocksWorld():
     def __init__(self):
         self._env = spear_env.from_cfg(cfg=env_cfg, render_mode="human", frame_skip=frame_skip)
         obs, info = self._env.reset()  # once, for info, later again

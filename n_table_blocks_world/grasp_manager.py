@@ -1,5 +1,5 @@
 import numpy as np
-from block_world.object_manager import ObjectManager
+from n_table_blocks_world.object_manager import ObjectManager
 
 
 class GraspManager():

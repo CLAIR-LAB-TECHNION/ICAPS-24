@@ -11,7 +11,7 @@ from klampt.plan import robotplanning
 from klampt.model import ik
 
 
-class BlockWorldMotionPlanner():
+class NTableBlocksWorldMotionPlanner():
     robot_height = 0.903 + 0.163 - 0.089159
     # 0.903 is the height of the robot mount, 0.163 is the height of the shift of shoulder link in mujoco,
     # 0.089159 is the height of shoulder link in urdf for klampt
