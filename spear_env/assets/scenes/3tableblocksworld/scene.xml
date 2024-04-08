@@ -45,57 +45,57 @@
         </body>
 
 <!--        table right:     -->
-        <body name="block 1 red" pos="-0.1 0.55 0.72">
+        <body name="block 1 red" pos="-0.1 0.55 0.73">
             <freejoint name="block 1 red" />
-            <geom type="box" size=".05 .05 .01" rgba="1 0 0 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="1 0 0 1"/>
         </body>
 
-        <body name="block 2 yellow" pos="0.1 0.50 0.72">
+        <body name="block 2 yellow" pos="0.1 0.50 0.73">
             <freejoint name="block 2 yellow"/>
-            <geom type="box" size=".05 .05 .01" rgba="1 1 0 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="1 1 0 1"/>
         </body>
 
-        <body name="block 3 cyan" pos="0.2 0.63 0.72">
+        <body name="block 3 cyan" pos="0.2 0.63 0.73">
             <freejoint name="block 3 cyan"/>
-            <geom type="box" size=".05 .05 .01" rgba="0 1 1 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="0 1 1 1"/>
         </body>
 
-        <body name="block 4 purple" pos="0.24 0.39 0.72">
+        <body name="block 4 purple" pos="0.24 0.39 0.73">
             <freejoint name="block 4 purple"/>
-            <geom type="box" size=".05 .05 .01" rgba="1 0 1 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="1 0 1 1"/>
         </body>
 
 <!--        table left   -->
 
-        <body name="block 5 red" pos="-0.2 -0.52 0.72">
+        <body name="block 5 red" pos="-0.2 -0.52 0.73">
             <freejoint name="block 5 red"/>
-            <geom type="box" size=".05 .05 .01" rgba="1 0 0 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="1 0 0 1"/>
         </body>
 
-        <body name="block 6 yellow" pos="0.1 -0.51 0.72">
+        <body name="block 6 yellow" pos="0.1 -0.51 0.73">
             <freejoint name="block 6 yellow"/>
-            <geom type="box" size=".05 .05 .01" rgba="1 1 0 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="1 1 0 1"/>
         </body>
 
-        <body name="block 7 cyan" pos="-0.07 -0.65 0.72">
+        <body name="block 7 cyan" pos="-0.07 -0.65 0.73">
             <freejoint name="block 7 cyan"/>
-            <geom type="box" size=".05 .05 .01" rgba="0 1 1 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="0 1 1 1"/>
         </body>
 
-        <body name="block 8 purple" pos="-0.1 -0.40 0.72">
+        <body name="block 8 purple" pos="-0.1 -0.40 0.73">
             <freejoint name="block 8 purple"/>
-            <geom type="box" size=".05 .05 .01" rgba="1 0 1 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="1 0 1 1"/>
         </body>
 
 <!--        table front   -->
-        <body name="block 9 red" pos="0.6 0 0.72">
+        <body name="block 9 red" pos="0.6 0 0.73">
             <freejoint name="block 9 red"/>
-            <geom type="box" size=".05 .05 .01" rgba="1 0 0 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="1 0 0 1"/>
         </body>
 
-        <body name="block 10 yellow" pos="0.6 0 0.74">
+        <body name="block 10 yellow" pos="0.6 0 0.76">
             <freejoint name="block 10 yellow"/>
-            <geom type="box" size=".05 .05 .01" rgba="1 1 0 1"/>
+            <geom type="box" size=".05 .05 .025" rgba="1 1 0 1"/>
         </body>
 
 
