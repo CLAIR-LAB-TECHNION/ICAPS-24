@@ -16,7 +16,7 @@ if __name__ == '__main__':
     if mp_vis:
         planner.open_vis()
 
-    red_box_pos = env.get_object_pos('block 1 red')
+    red_box_pos = env.get_object_pos('block 10 yellow')
     yellow_box_pos = env.get_object_pos('block 2 yellow')
     purple_box_pos = env.get_object_pos('block 3 cyan')
 

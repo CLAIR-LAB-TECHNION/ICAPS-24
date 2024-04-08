@@ -2,43 +2,10 @@
 
 import numpy as np
 import spear_env
-from spear_env.tasks.null_task import NullTask
 from n_table_blocks_world.PID_controller import PIDController
 from n_table_blocks_world.grasp_manager import GraspManager
 from n_table_blocks_world.object_manager import ObjectManager
-
-
-env_cfg = dict(
-    scene=dict(
-        resource='3tableblocksworld',
-        render_camera='top-right'
-    ),
-    robot=dict(
-        resource='ur5e',
-        mount='rethink_stationary',
-        privileged_info=True,
-        attachments=['adhesive_gripper'],
-    ),
-    task=NullTask,
-)
-
-INIT_CONFIG = np.array([0, -1.57, 0, 0, 0, 0])
-INIT_MAX_VELOCITY = np.array([2, 2, 2, 2, 2, 2])
-
-# for PID controller that failed :(
-# was close to good with frame_skip=5
-# kp = [200, 300, 250, 50, 50, 50]
-# kd = [40, 50, 40, 16, 16, 16]
-# ki = [5, 15, 8, 3, 3, 3]
-
-# frame skip 1
-# kp = [1500, 1500, 1500, 300, 300, 300]
-# kd = [200, 200, 200, 50, 50, 50]
-# ki = [20, 100, 100, 20, 20, 20]
-# code PID might work with shorter timestep...
-
-
-frame_skip = 5
+from n_table_blocks_world.configurations_and_constants import *
 
 
 class NTableBlocksWorld():

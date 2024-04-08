@@ -1,5 +1,4 @@
 import time
-
 import numpy as np
 from klampt import WorldModel, Geometry3D, RobotModel
 from klampt.model.geometry import box
@@ -9,14 +8,11 @@ from klampt.plan.robotcspace import RobotCSpace
 from klampt.model.collide import WorldCollider
 from klampt.plan import robotplanning
 from klampt.model import ik
+from n_table_blocks_world.configurations_and_constants import *
+from motion_planning.configurations import limits_l, limits_h, default_config
 
 
 class NTableBlocksWorldMotionPlanner():
-    robot_height = 0.903 + 0.163 - 0.089159
-    # 0.903 is the height of the robot mount, 0.163 is the height of the shift of shoulder link in mujoco,
-    # 0.089159 is the height of shoulder link in urdf for klampt
-    mount_top_base = robot_height - 0.01  # avoid collision between robot base and mount
-
     def __init__(self, eps=1e-2):
         """
         parameters:
@@ -30,23 +26,11 @@ class NTableBlocksWorldMotionPlanner():
         self._build_world()
 
         self.robot = self.world.robot(0)
-
-        # constraint joint limits for faster planning. joint 2 is base rotation, don't need entire 360,
-        # joint 3 is shoulder lift, outside the limits will probably result table collision anyway.
-        # joint 4 has 2 pi range anyway. all the others can do fine with 3pi range
-        limits_l = [0, 0, -np.pi / 2, -4.5, -np.pi, -3 * np.pi / 2, -3 * np.pi / 2, -3 * np.pi / 2, 0, 0]
-        limits_h = [0, 0, 3 * np.pi / 2, 1., np.pi, 3 * np.pi / 2, 3 * np.pi / 2, 3 * np.pi / 2, 0, 0]
-        self.robot.setJointLimits(limits_l, limits_h)
-
         self.ee_link = self.robot.link("ee_link")
 
-        self.planning_config = {  # TODO: configurable parameters?
-            # "type": "lazyrrg*",
-            "type": "rrt*",
-            "bidirectional": True,
-            "connectionThreshold": 30.0,
-            # "shortcut": True, # only for rrt
-        }
+        # values are imported from configuration file
+        self.robot.setJointLimits(limits_l, limits_h)
+        self.planning_config = default_config
 
     def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=30, max_length_to_distance_ratio=2):
         """
@@ -242,13 +226,14 @@ class NTableBlocksWorldMotionPlanner():
 
     def _build_world(self):
         """ build the obstacles in the world """
+        # all sizes and positions are imported from configuration file
         self._add_box_geom("floor", (5, 5, 0.01), [0, 0, 0], [0.1, 0.1, 0.1, 1])
-        self._add_box_geom("table_left", (0.60, 0.60, 0.01), [0, -0.6, 0.7], [0.5, 0.5, 0.5, 0.8])
-        self._add_box_geom("table_right", (0.60, 0.60, 0.01), [0, 0.6, 0.7], [0.5, 0.5, 0.5, 0.8])
-        self._add_box_geom("table_front", (0.60, 0.60, 0.01), [0.6, 0, 0.7], [0.5, 0.5, 0.5, 0.8])
-        self._add_box_geom("purpule_box", (0.1, 0.1, 0.02), [-0.2, 0.5, 0.72], [0.5, 0.1, 0.5, 1])
-        self._add_box_geom("robot_mount_approx", size=(0.45, 0.25, self.mount_top_base),
-                           center=[-0.1, 0, self.mount_top_base / 2], color=[0.5, 0.5, 0.5, 1])
+        self._add_box_geom("table_left", table_size, table_left_pos, [0.5, 0.5, 0.5, 0.8])
+        self._add_box_geom("table_right", table_size, table_right_pos, [0.5, 0.5, 0.5, 0.8])
+        self._add_box_geom("table_front", table_size, table_front_pos, [0.5, 0.5, 0.5, 0.8])
+        # self._add_box_geom("purpule_box", (0.1, 0.1, 0.02), [-0.2, 0.5, 0.72], [0.5, 0.1, 0.5, 1])
+        self._add_box_geom("robot_mount_approx", size=(0.45, 0.25, mount_top_base),
+                           center=[-0.1, 0, mount_top_base / 2], color=[0.5, 0.5, 0.5, 1])
 
     def _add_box_geom(self, name, size, center, color):
         """
