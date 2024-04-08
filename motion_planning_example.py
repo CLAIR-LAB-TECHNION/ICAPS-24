@@ -20,7 +20,8 @@ if __name__ == '__main__':
     yellow_box_pos = env.get_object_pos('block 2 yellow')
     purple_box_pos = env.get_object_pos('block 3 cyan')
 
-    robot_joint_pos = env.reset()
+    state = env.reset()
+    robot_joint_pos = state['robot_joint_pos']
     # run simulation for few steps:
     for i in range(10):
         env.step(robot_joint_pos)

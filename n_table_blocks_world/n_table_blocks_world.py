@@ -6,7 +6,6 @@ from spear_env.tasks.null_task import NullTask
 from n_table_blocks_world.PID_controller import PIDController
 from n_table_blocks_world.grasp_manager import GraspManager
 from n_table_blocks_world.object_manager import ObjectManager
-from mujoco import mj_loadAllPluginLibraries
 
 
 env_cfg = dict(
@@ -64,7 +63,6 @@ class NTableBlocksWorld():
         self.reset()
 
     def reset(self):
-        """ TODO """
         self.max_joint_velocities = INIT_MAX_VELOCITY
 
         obs, _ = self._env.reset()
@@ -72,13 +70,12 @@ class NTableBlocksWorld():
         self.robot_joint_pos = INIT_CONFIG
         self.robot_joint_velocities = obs["robot_state"][6:12]
         self.gripper_state_closed = False
+        self._grasp_manager.release_object()
+        self._object_manager.reset_object_positions()
 
         return self.get_state()
 
     def step(self, target_joint_pos, gripper_closed=False):
-        """
-        TODO
-        """
         # if reset_pid:
         #     self._pid_controller.reset_endpoint(target_joint_pos)
 
@@ -98,8 +95,12 @@ class NTableBlocksWorld():
         return self.get_state()
 
     def get_state(self):
-        # TODO: add blocks state and gripper state
-        return self.robot_joint_pos
+        object_positions = self._object_manager.get_all_object_positons_dict()
+        state = {"robot_joint_pos": self.robot_joint_pos,
+                 "robot_joint_velocities": self.robot_joint_velocities,
+                 "gripper_state_closed": self.gripper_state_closed,
+                 "object_positions": object_positions}
+        return state
 
     def get_object_pos(self, name: str):
         return self._object_manager.get_object_pos(name)

@@ -15,6 +15,15 @@ class ObjectManager:
         self.object_names = [name for name in all_joint_names if name.startswith("block")]
         self.objects_mjdata_dict = {name: self._mj_model.joint(name) for name in self.object_names}
 
+        self.initial_positions_dict = self.get_all_object_positons_dict()
+
+    def reset_object_positions(self):
+        for name, pos in self.initial_positions_dict.items():
+            self.set_object_pose(name, pos,[0, 1, 0, 0])
+
+    def get_all_object_positons_dict(self):
+        return {name: self.get_object_pos(name) for name in self.object_names}
+
     def get_object_pos(self, name: str):
         return self._mj_data.joint(name).qpos[:3]
 
