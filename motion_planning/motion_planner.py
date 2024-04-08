@@ -34,21 +34,21 @@ class NTableBlocksWorldMotionPlanner():
         # constraint joint limits for faster planning. joint 2 is base rotation, don't need entire 360,
         # joint 3 is shoulder lift, outside the limits will probably result table collision anyway.
         # joint 4 has 2 pi range anyway. all the others can do fine with 3pi range
-        limits_l = [0, 0, -np.pi/2, -4.5, -np.pi, -3*np.pi/2, -3*np.pi/2, -3*np.pi/2, 0, 0]
-        limits_h = [0, 0, 3*np.pi/2, 1., np.pi, 3*np.pi/2, 3*np.pi/2, 3*np.pi/2, 0, 0]
+        limits_l = [0, 0, -np.pi / 2, -4.5, -np.pi, -3 * np.pi / 2, -3 * np.pi / 2, -3 * np.pi / 2, 0, 0]
+        limits_h = [0, 0, 3 * np.pi / 2, 1., np.pi, 3 * np.pi / 2, 3 * np.pi / 2, 3 * np.pi / 2, 0, 0]
         self.robot.setJointLimits(limits_l, limits_h)
 
         self.ee_link = self.robot.link("ee_link")
 
         self.planning_config = {  # TODO: configurable parameters?
-                                # "type": "lazyrrg*",
-                                "type": "rrt*",
-                                "bidirectional": True,
-                                "connectionThreshold": 30.0,
-                                # "shortcut": True, # only for rrt
+            # "type": "lazyrrg*",
+            "type": "rrt*",
+            "bidirectional": True,
+            "connectionThreshold": 30.0,
+            # "shortcut": True, # only for rrt
         }
 
-    def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=30):
+    def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=30, max_length_to_distance_ratio=2):
         """
         plan from a start configuration to a goal pose that is given in 6d configuration space
         @param start_config: 6d configuration
@@ -58,17 +58,19 @@ class NTableBlocksWorldMotionPlanner():
         @return: path in 6d configuration space
         """
         start_config_klampt = self.config6d_to_klampt(start_config)
-        path = self._plan_from_config_to_pose_klampt(start_config_klampt, goal_pos, goal_R, max_time)
+        path = self._plan_from_config_to_pose_klampt(start_config_klampt, goal_pos, goal_R, max_time,
+                                                     max_length_to_distance_ratio)
 
         return self.path_klampt_to_config6d(path)
 
-    def plan_from_start_to_goal_config(self, start_config, goal_config, max_time=30):
+    def plan_from_start_to_goal_config(self, start_config, goal_config, max_time=30, max_length_to_distance_ratio=2):
         """
         plan from a start and a goal that are given in 6d configuration space
         """
         start_config_klampt = self.config6d_to_klampt(start_config)
         goal_config_klampt = self.config6d_to_klampt(goal_config)
-        path = self._plan_from_start_to_goal_config_klampt(start_config_klampt, goal_config_klampt, max_time)
+        path = self._plan_from_start_to_goal_config_klampt(start_config_klampt, goal_config_klampt, max_time,
+                                                           max_length_to_distance_ratio)
 
         return self.path_klampt_to_config6d(path)
 
@@ -84,12 +86,11 @@ class NTableBlocksWorldMotionPlanner():
             start_config = self.config6d_to_klampt(start_config)
         return self.klampt_to_config6d(self._ik_solve_klampt(goal_pos, goal_R, start_config))
 
-
     def config6d_to_klampt(self, config):
         """
         There are 10 links in our URDF for klampt, some are stationary, actual joints are 2:8
         """
-        config_klampt = [0]*10
+        config_klampt = [0] * 10
         config_klampt[2:8] = config
         return config_klampt
 
@@ -163,7 +164,8 @@ class NTableBlocksWorldMotionPlanner():
             print("no ik solution found")
         return self.robot.getConfig()
 
-    def _plan_from_config_to_pose_klampt(self, start_config, goal_pos, goal_R, max_time=30):
+    def _plan_from_config_to_pose_klampt(self, start_config, goal_pos, goal_R, max_time=30,
+                                         max_length_to_distance_ratio=2):
         """
         plan from a start configuration to a goal pose that is given in klampt 10d configuration space
         @param start_config: 10d configuration
@@ -181,9 +183,10 @@ class NTableBlocksWorldMotionPlanner():
                                                             # extraConstraints=[space_reduction_constraint],
                                                             **self.planning_config)
         planner.space.eps = self.eps
-        return self._plan(planner, max_time)
+        return self._plan(planner, max_time, max_length_to_distance_ratio)
 
-    def _plan_from_start_to_goal_config_klampt(self, start_config, goal_config, max_time=30):
+    def _plan_from_start_to_goal_config_klampt(self, start_config, goal_config, max_time=30,
+                                               max_length_to_distance_ratio=2):
         """
         plan from a start and a goal that are given in klampt 10d configuration space
         """
@@ -193,24 +196,49 @@ class NTableBlocksWorldMotionPlanner():
                                                # extraConstraints=[space_reduction_constraint],
                                                **self.planning_config)
         planner.space.eps = self.eps
-        return self._plan(planner, max_time)
+        return self._plan(planner, max_time, max_length_to_distance_ratio)
 
-    def _plan(self, planner: MotionPlan, max_time=30, steps_per_iter=100):
+    def _plan(self, planner: MotionPlan, max_time=30, steps_per_iter=100, max_length_to_distance_ratio=2):
         """
         find path given a prepared planner, with endpoints already set
         @param planner: MotionPlan object, endpoints already set
         @param max_time: maximum planning time
         @param steps_per_iter: steps per iteration
+        @param max_length_to_distance_ratio: maximum length of the pass to distance between start and goal. If there is
+            still time, the planner will continue to plan until this ratio is reached. This is to avoid long paths
+            where the robot just moves around because non-optimal paths are still possible.
         """
         start_time = time.time()
         path = None
-        while path is None and time.time() - start_time < max_time:
+        while (path is None or self.compute_path_length_to_distance_ratio(path) > max_length_to_distance_ratio) \
+                and time.time() - start_time < max_time:
             print("planning...")
             planner.planMore(steps_per_iter)
             path = planner.getPath()
         if path is None:
             print("no path found")
         return path
+
+    def compute_path_length(self, path):
+        """
+        compute the length of the path
+        """
+        if path is None:
+            return np.inf
+        length = 0
+        for i in range(len(path) - 1):
+            length += np.linalg.norm(np.array(path[i]) - np.array(path[i + 1]))
+        return length
+
+    def compute_path_length_to_distance_ratio(self, path):
+        """ compute the ratio of path length to the distance between start and goal """
+        if path is None:
+            return np.inf
+        start = np.array(path[0])
+        goal = np.array(path[-1])
+        distance = np.linalg.norm(start - goal)
+        length = self.compute_path_length(path)
+        return length / distance
 
     def _build_world(self):
         """ build the obstacles in the world """
