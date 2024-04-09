@@ -8,6 +8,9 @@ mujoco_env_files = glob.glob('mujoco_env/assets/**/*', recursive=True)
 # remove mujoco_env prefix:
 mujoco_env_files = [f.replace('mujoco_env/', '') for f in mujoco_env_files]
 
+motion_planning_files = glob.glob('motion_planning/ur_description/**/*', recursive=True)
+motion_planning_files = [f.replace('motion_planning/', '') for f in motion_planning_files]
+
 setup(
     name='ICAPS-24',
     version='0.1.0',
@@ -23,6 +26,6 @@ setup(
     package_data={
         # 'mujoco_env': ["assets/scenes/3tableblocksworld/scene.xml"], # worked
         'mujoco_env': mujoco_env_files,
-
+        'motion_planning': motion_planning_files,
     }
 )

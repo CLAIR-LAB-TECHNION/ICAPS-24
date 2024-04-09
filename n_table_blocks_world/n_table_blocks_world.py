@@ -9,8 +9,9 @@ from n_table_blocks_world.configurations_and_constants import *
 
 
 class NTableBlocksWorld():
-    def __init__(self):
-        self._env = mujoco_env.from_cfg(cfg=env_cfg, render_mode="human", frame_skip=frame_skip)
+    def __init__(self, render_mode="human"):
+        self.render_mode = render_mode
+        self._env = mujoco_env.from_cfg(cfg=env_cfg, render_mode=render_mode, frame_skip=frame_skip)
         obs, info = self._env.reset()  # once, for info, later again
         self._mj_model = info['priveleged']['model']
         self._mj_data = info['priveleged']['data']
