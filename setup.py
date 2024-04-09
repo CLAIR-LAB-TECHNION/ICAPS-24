@@ -3,9 +3,9 @@ import glob
 import os
 
 
-mujoco_package_data_files = ["mujoco_env/assets/scenes/3tableblocksworld/scene.xml",
-                             "mujoco_env/assets/robots/ur5e/robot.xml",
-                             "mujoco_env/assets/mounts/rethink_stationary/mount.xml",
+mujoco_package_data_files = ["assets/scenes/3tableblocksworld/scene.xml",
+                             "assets/robots/ur5e/robot.xml",
+                             "assets/mounts/rethink_stationary/mount.xml",
                              ]
 
 setup(
@@ -23,6 +23,6 @@ setup(
         'scipy>=1.13.0'
     ],
     package_data={
-        'mujoco_env': mujoco_package_data_files
+        'icaps24.mujoco_env': mujoco_package_data_files
     }
 )
