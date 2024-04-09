@@ -3,7 +3,10 @@ import glob
 import os
 
 
-mujoco_package_data_files = ["mujoco_env/assets/**/*", "mujoco_env/assets/*"]
+mujoco_package_data_files = ["mujoco_env/assets/scenes/3tableblocksworld/scene.xml",
+                             "mujoco_env/assets/robots/ur5e/robot.xml",
+                             "mujoco_env/assets/mounts/rethink_stationary/mount.xml",
+                             ]
 
 setup(
     name='icaps24',
