@@ -3,10 +3,7 @@ import glob
 import os
 
 
-# Recursively include all files in the mujoco_env/assets directory
-package_data_files = glob.glob('mujoco_env/assets/**/*', recursive=True)
-# Filter out directories from the list
-package_data_files = [f for f in package_data_files if not os.path.isdir(f)]
+mujoco_package_data_files = ["mujoco_env/assets/**/*", "mujoco_env/assets/*"]
 
 setup(
     name='icaps24',
@@ -23,6 +20,6 @@ setup(
         'scipy>=1.13.0'
     ],
     package_data={
-        'mujoco_env': package_data_files
+        'mujoco_env': mujoco_package_data_files
     }
 )
