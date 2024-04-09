@@ -11,10 +11,7 @@ import os
 setup(
     name='ICAPS-24',
     version='0.1.0',
-    packages=['mujoco_env', 'motion_planning', 'n_table_blocks_world'],
-    package_dir={'mujo_env': 'mujoco_env',
-                 'motion_planning': 'motion_planning',
-                 'n_table_blocks_world': 'n_table_blocks_world'},
+    packages=find_packages(),
     python_requires='>=3.9',
     install_requires=[
         'dm_control>=1.0.16',
