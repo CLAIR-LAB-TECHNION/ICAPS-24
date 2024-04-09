@@ -1,1 +1,1 @@
-include mujoco_env/assets/*
+recursive-include mujoco_env/assets/ *
