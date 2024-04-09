@@ -1,4 +1,4 @@
-name: spear-env
+name: mujoco-env
 channels:
   - pytorch
   - conda-forge

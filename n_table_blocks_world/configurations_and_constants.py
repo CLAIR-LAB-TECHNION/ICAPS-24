@@ -1,5 +1,5 @@
 import numpy as np
-from spear_env.tasks.null_task import NullTask
+from mujoco_env.tasks.null_task import NullTask
 
 
 block_size = [0.1, 0.1, 0.05]

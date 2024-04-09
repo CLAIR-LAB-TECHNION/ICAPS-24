@@ -1,10 +1,10 @@
 import numpy as np
 
-import spear_env
-from spear_env.tasks.null_task import NullTask
+import mujoco_env
+from mujoco_env.tasks.null_task import NullTask
 
-from spear_env.episode import *
-from spear_env.common.defs import JointType, ActuatorType, cfg_keys
+from mujoco_env.episode import *
+from mujoco_env.common.defs import JointType, ActuatorType, cfg_keys
 
 
 cfg = dict(
@@ -20,7 +20,7 @@ cfg = dict(
     task=NullTask,
 )
 
-env = spear_env.from_cfg(cfg=cfg, render_mode="human", frame_skip=5)
+env = mujoco_env.from_cfg(cfg=cfg, render_mode="human", frame_skip=5)
 
 N_EPISODES = 1
 N_STEPS = 20000

@@ -1,7 +1,7 @@
 """ a wrapper around spear env to simplify and fix some issues with the environment """
 
 import numpy as np
-import spear_env
+import mujoco_env
 from n_table_blocks_world.PID_controller import PIDController
 from n_table_blocks_world.grasp_manager import GraspManager
 from n_table_blocks_world.object_manager import ObjectManager
@@ -10,7 +10,7 @@ from n_table_blocks_world.configurations_and_constants import *
 
 class NTableBlocksWorld():
     def __init__(self):
-        self._env = spear_env.from_cfg(cfg=env_cfg, render_mode="human", frame_skip=frame_skip)
+        self._env = mujoco_env.from_cfg(cfg=env_cfg, render_mode="human", frame_skip=frame_skip)
         obs, info = self._env.reset()  # once, for info, later again
         self._mj_model = info['priveleged']['model']
         self._mj_data = info['priveleged']['data']
