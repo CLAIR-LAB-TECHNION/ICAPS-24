@@ -47,7 +47,6 @@ dependencies:
   - importlib-metadata=7.0.2=pyha770c72_0
   - importlib_metadata=7.0.2=hd8ed1ab_0
   - importlib_resources=6.3.0=pyhd8ed1ab_0
-  - intel-openmp=2024.0.0=h57928b3_49841
   - ipykernel=6.29.3=pyha63f2e9_0
   - ipython=8.18.1=pyh7428d3b_3
   - ipywidgets=8.1.2=pyhd8ed1ab_0
