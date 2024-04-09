@@ -227,15 +227,15 @@ class NTableBlocksWorldMotionPlanner():
     def _build_world(self):
         """ build the obstacles in the world """
         # all sizes and positions are imported from configuration file
-        self._add_box_geom("floor", (5, 5, 0.01), [0, 0, 0], [0.1, 0.1, 0.1, 1])
-        self._add_box_geom("table_left", table_size, table_left_pos, [0.5, 0.5, 0.5, 0.8])
-        self._add_box_geom("table_right", table_size, table_right_pos, [0.5, 0.5, 0.5, 0.8])
-        self._add_box_geom("table_front", table_size, table_front_pos, [0.5, 0.5, 0.5, 0.8])
-        # self._add_box_geom("purpule_box", (0.1, 0.1, 0.02), [-0.2, 0.5, 0.72], [0.5, 0.1, 0.5, 1])
+        self._add_box_geom("floor", (5, 5, 0.01), [0, 0, 0], [0.1, 0.1, 0.1, 1], False)
+        self._add_box_geom("table_left", table_size, table_left_pos, [0.5, 0.5, 0.5, 0.8], False)
+        self._add_box_geom("table_right", table_size, table_right_pos, [0.5, 0.5, 0.5, 0.8], False)
+        self._add_box_geom("table_front", table_size, table_front_pos, [0.5, 0.5, 0.5, 0.8], False)
+        # self._add_box_geom("purple_box", (0.1, 0.1, 0.02), [-0.2, 0.5, 0.72], [0.5, 0.1, 0.5, 1])
         self._add_box_geom("robot_mount_approx", size=(0.45, 0.25, mount_top_base),
-                           center=[-0.1, 0, mount_top_base / 2], color=[0.5, 0.5, 0.5, 1])
+                           center=[-0.1, 0, mount_top_base / 2], color=[0.5, 0.5, 0.5, 1], update_vis=False)
 
-    def _add_box_geom(self, name, size, center, color):
+    def _add_box_geom(self, name, size, center, color, update_vis=True):
         """
         add box geometry for collision in the world
         """
@@ -246,3 +246,22 @@ class NTableBlocksWorldMotionPlanner():
         box_rigid_obj = self.world.makeRigidObject(name)
         box_rigid_obj.geometry().set(box_geom)
         box_rigid_obj.appearance().setColor(*color)
+
+        if update_vis:
+            vis.add("world", self.world)
+
+    def add_block(self, name, position, color):
+        """
+        add block to the world
+        """
+        self._add_box_geom(name, block_size, position, color)
+
+    def move_block(self, name, position):
+        """
+        move block to position
+        """
+        rigid_obj = self.world.rigidObject(name)
+        width, depth, height = block_size
+        box_obj = box(width=width, height=height, depth=depth, center=position)
+        rigid_obj.geometry().set(box_obj)
+

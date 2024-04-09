@@ -2,7 +2,7 @@ import numpy as np
 from spear_env.tasks.null_task import NullTask
 
 
-block_size = [0.1, 0.1, 0.025]
+block_size = [0.1, 0.1, 0.05]
 # blocks are configured at spear_env/assets/scenes/3tableblocksworld/scene.xml
 # Right now this is a constant and can't be changed from here
 # Note that sizes in the xml file are half, because boxes are defined by their center and half size
