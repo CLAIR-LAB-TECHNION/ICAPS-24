@@ -2,11 +2,10 @@ from setuptools import setup, find_packages
 import glob
 import os
 
-#
-# mujoco_package_data_files = ["mujoco_env/assets/scenes/3tableblocksworld/scene.xml",
-#                              "mujoco_env/assets/robots/ur5e/robot.xml",
-#                              "mujoco_env/assets/mounts/rethink_stationary/mount.xml",
-#                              ]
+
+# all files inside assets dir, recursively
+mujoco_env_files = glob.glob('mujoco_env/assets/**/*', recursive=True)
+
 
 setup(
     name='ICAPS-24',
@@ -21,6 +20,8 @@ setup(
         'PyYAML>=6.0.1',
     ],
     package_data={
-        'mujoco_env': ["*.xml", "assets/scenes/3tableblocksworld/scene.xml"],
+        # 'mujoco_env': ["assets/scenes/3tableblocksworld/scene.xml"], # worked
+        'mujoco_env': mujoco_env_files,
+
     }
 )
