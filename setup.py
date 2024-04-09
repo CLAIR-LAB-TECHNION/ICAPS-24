@@ -9,7 +9,7 @@ mujoco_package_data_files = ["mujoco_env/assets/scenes/3tableblocksworld/scene.x
                              ]
 
 setup(
-    name='icaps24',
+    name='ICAPS-24',
     version='0.1.0',
     packages=find_packages(),
     python_requires='>=3.9',
