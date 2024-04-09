@@ -5,7 +5,8 @@ import os
 
 # all files inside assets dir, recursively
 mujoco_env_files = glob.glob('mujoco_env/assets/**/*', recursive=True)
-
+# remove mujoco_env prefix:
+mujoco_env_files = [f.replace('mujoco_env/', '') for f in mujoco_env_files]
 
 setup(
     name='ICAPS-24',
