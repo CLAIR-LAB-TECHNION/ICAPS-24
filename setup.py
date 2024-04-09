@@ -23,6 +23,6 @@ setup(
         'scipy>=1.13.0'
     ],
     package_data={
-        'icaps24.mujoco_env': mujoco_package_data_files
+        'mujoco_env': mujoco_package_data_files
     }
 )
