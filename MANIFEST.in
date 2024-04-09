@@ -1,1 +1,1 @@
-recursive-include mujoco_env/assets/ *
+recursive-include icaps24/mujoco_env/assets/ *
