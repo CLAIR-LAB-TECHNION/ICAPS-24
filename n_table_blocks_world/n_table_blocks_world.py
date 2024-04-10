@@ -41,6 +41,9 @@ class NTableBlocksWorld():
         self._grasp_manager.release_object()
         self._object_manager.reset_object_positions()
 
+        if self.render_mode == "human":
+            self._env.render()
+
         return self.get_state()
 
     def step(self, target_joint_pos, gripper_closed=False):
@@ -58,7 +61,8 @@ class NTableBlocksWorld():
         else:
             self._grasp_manager.release_object()
 
-        self._env.render()
+        if self.render_mode == "human":
+            self._env.render()
 
         return self.get_state()
 
@@ -68,6 +72,9 @@ class NTableBlocksWorld():
                  "robot_joint_velocities": self.robot_joint_velocities,
                  "gripper_state_closed": self.gripper_state_closed,
                  "object_positions": object_positions}
+        if self.render_mode == "rgb_array":
+            state["rgb_image"] = self._env.render()
+
         return state
 
     def get_object_pos(self, name: str):
