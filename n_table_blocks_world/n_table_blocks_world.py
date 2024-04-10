@@ -41,6 +41,8 @@ class NTableBlocksWorld():
         self._grasp_manager.release_object()
         self._object_manager.reset_object_positions()
 
+        self.step(INIT_CONFIG, gripper_closed=False)
+
         if self.render_mode == "human":
             self._env.render()
 
