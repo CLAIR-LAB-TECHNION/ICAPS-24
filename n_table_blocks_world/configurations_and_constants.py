@@ -20,7 +20,8 @@ table_front_pos = [0.6, 0.0, 0.7]
 env_cfg = dict(
     scene=dict(
         resource='3tableblocksworld',
-        render_camera='top-right'
+        render_camera='top-right',
+        renderer_cfg={"width": 300, "height": 300},
     ),
     robot=dict(
         resource='ur5e',

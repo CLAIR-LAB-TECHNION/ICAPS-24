@@ -27,7 +27,6 @@ class NTableBlocksWorld():
 
         # dt = self._mj_model.opt.timestep * frame_skip
         # self._pid_controller = PIDController(kp, ki, kd, dt)
-        self.set_rgb_image_size(300, 300)
 
         self.reset()
 
@@ -138,8 +137,3 @@ class NTableBlocksWorld():
         self.robot_joint_pos = obs['robot_state'][:6]
         self.robot_joint_velocities = obs['robot_state'][6:12]
         self.gripper_state_closed = gripper_closed
-
-    def set_rgb_image_size(self, height, width):
-        self._mj_model.vis.global_.offheight = height
-        self._mj_model.vis.global_.offwidth = width
-
