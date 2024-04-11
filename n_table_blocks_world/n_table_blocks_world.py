@@ -68,14 +68,15 @@ class NTableBlocksWorld():
 
         return self.get_state()
 
+    def render(self):
+        return self._env.render()
+
     def get_state(self):
         object_positions = self._object_manager.get_all_object_positons_dict()
         state = {"robot_joint_pos": self.robot_joint_pos,
                  "robot_joint_velocities": self.robot_joint_velocities,
                  "gripper_state_closed": self.gripper_state_closed,
                  "object_positions": object_positions}
-        if self.render_mode == "rgb_array":
-            state["rgb_image"] = self._env.render()
 
         return state
 
