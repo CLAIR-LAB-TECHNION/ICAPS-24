@@ -10,6 +10,7 @@ from klampt.plan import robotplanning
 from klampt.model import ik
 from n_table_blocks_world.configurations_and_constants import *
 from motion_planning.configurations import limits_l, limits_h, default_config
+import os
 
 
 class NTableBlocksWorldMotionPlanner():
@@ -22,7 +23,9 @@ class NTableBlocksWorldMotionPlanner():
         self.eps = eps
 
         self.world = WorldModel()
-        self.world.readFile("./motion_planning/klampt_world.xml")
+        dir = os.path.dirname(os.path.realpath(__file__))
+        world_path = os.path.join(dir, "klampt_world.xml")
+        self.world.readFile(world_path)
         self._build_world()
 
         self.robot = self.world.robot(0)
