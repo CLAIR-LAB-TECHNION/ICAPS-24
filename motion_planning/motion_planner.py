@@ -147,7 +147,7 @@ class NTableBlocksWorldMotionPlanner():
             self.robot.setConfig(start_config)
         goal_R = np.array(goal_R).flatten()  # flatten the 3x3 rotation matrix, as needed for klampt
         ik_objective = ik.objective(self.ee_link, R=goal_R, t=goal_pos)
-        if not ik.solve_nearby(ik_objective, 1):
+        if not ik.solve(ik_objective):
             print("no ik solution found")
         return self.robot.getConfig()
 
