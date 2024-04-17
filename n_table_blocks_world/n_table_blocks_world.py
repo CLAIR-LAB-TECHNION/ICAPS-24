@@ -48,9 +48,11 @@ class NTableBlocksWorld():
 
         return self.get_state()
 
-    def step(self, target_joint_pos, gripper_closed=False):
+    def step(self, target_joint_pos, gripper_closed=None):
         # if reset_pid:
         #     self._pid_controller.reset_endpoint(target_joint_pos)
+        if gripper_closed is None:
+            gripper_closed = self.gripper_state_closed
 
         self._env_step(target_joint_pos, gripper_closed)
         self._clip_joint_velocities()
