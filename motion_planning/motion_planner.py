@@ -121,9 +121,12 @@ class NTableBlocksWorldMotionPlanner():
         visualize a path, this one is meant to be used in google colab, it will initialize a new window
         """
         assert self._in_colab, "This function is meant to be used in google colab"
+
+        path_klampt = [self.config6d_to_klampt(q) for q in path]
+
         vis.init("HTML")
         vis.add("world", self.world)
-        vis.add("path", path)
+        vis.add("path", path_klampt)
         vis.setColor("path", 0, 1, 0, 1)
         vis.show()
 
