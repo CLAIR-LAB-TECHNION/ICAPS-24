@@ -21,6 +21,7 @@ class NTableBlocksWorldMotionPlanner():
             collision, too low value may lead to slow planning. Default value is 1e-2.
         """
         self.eps = eps
+        self._in_colab = check_if_in_colab()
 
         self.world = WorldModel()
         dir = os.path.dirname(os.path.realpath(__file__))
@@ -32,7 +33,7 @@ class NTableBlocksWorldMotionPlanner():
         self.ee_link = self.robot.link("ee_link")
 
         # values are imported from configuration
-        self.robot.setJointLimits(limits_l[1:9], limits_h[1:9])  # TODO change in config file to 8d
+        self.robot.setJointLimits(limits_l, limits_h)
         self.planning_config = default_config
 
     def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=30, max_length_to_distance_ratio=2):
@@ -75,7 +76,7 @@ class NTableBlocksWorldMotionPlanner():
 
     def config6d_to_klampt(self, config):
         """
-        There are 10 links in our URDF for klampt, some are stationary, actual joints are 2:8
+        There are 8 links in our rob for klampt, some are stationary, actual joints are 1:7
         """
         config_klampt = [0] * 8
         config_klampt[1:7] = config
@@ -83,13 +84,13 @@ class NTableBlocksWorldMotionPlanner():
 
     def klampt_to_config6d(self, config_klampt):
         """
-        There are 10 links in our URDF for klampt, some are stationary, actual joints are 2:8
+        There are 8 links in our rob for klampt, some are stationary, actual joints are 1:7
         """
         return config_klampt[1:7]
 
     def path_klampt_to_config6d(self, path_klampt):
         """
-        convert a path in klampt 10d configuration space to 6d configuration space
+        convert a path in klampt 8d configuration space to 6d configuration space
         """
         if path_klampt is None:
             return None
@@ -98,16 +99,32 @@ class NTableBlocksWorldMotionPlanner():
             path.append(self.klampt_to_config6d(q))
         return path
 
-    def open_vis(self):
+    def visualize(self):
         """
         open visualization window
         """
-        vis.add("world", self.world)
-        # set camera position:
-        viewport = vis.getViewport()
-        viewport.camera.tgt = [0, 0, 0.7]
-        viewport.camera.rot = [0, -0.7, 2]
+        beckend = "HTML" if self._in_colab else "PyQt"
+        vis.init(beckend)
 
+        vis.add("world", self.world)
+
+        if not self._in_colab:
+            # set camera position:
+            viewport = vis.getViewport()
+            viewport.camera.tgt = [0, 0, 0.7]
+            viewport.camera.rot = [0, -0.7, 2]
+
+        vis.show()
+
+    def visualize_path(self, path):
+        """
+        visualize a path, this one is meant to be used in google colab, it will initialize a new window
+        """
+        assert self._in_colab, "This function is meant to be used in google colab"
+        vis.init("HTML")
+        vis.add("world", self.world)
+        vis.add("path", path)
+        vis.setColor("path", 0, 1, 0, 1)
         vis.show()
 
     def show_path_vis(self, path):
@@ -125,7 +142,7 @@ class NTableBlocksWorldMotionPlanner():
         move to a config wwithin the internal world model of the motion planner. Use for visualization.
         """
         if len(q) == 6:
-            q = self.config6d_to_klampt(q)  # convert to klampt 10d config
+            q = self.config6d_to_klampt(q)  # convert to klampt 8d config
         self.robot.setConfig(q)
 
     def vis_spin(self, t):
@@ -153,12 +170,12 @@ class NTableBlocksWorldMotionPlanner():
     def _plan_from_config_to_pose_klampt(self, start_config, goal_pos, goal_R, max_time=30,
                                          max_length_to_distance_ratio=2):
         """
-        plan from a start configuration to a goal pose that is given in klampt 10d configuration space
-        @param start_config: 10d configuration
+        plan from a start configuration to a goal pose that is given in klampt 8d configuration space
+        @param start_config: 8d configuration
         @param goal_pos: ee position
         @param goal_R: ee orientation as a rotation matrix
         @param max_time: maximum planning time
-        @return: path in 10d configuration space
+        @return: path in 8d configuration space
         """
         self.robot.setConfig(start_config)
 
@@ -174,7 +191,7 @@ class NTableBlocksWorldMotionPlanner():
     def _plan_from_start_to_goal_config_klampt(self, start_config, goal_config, max_time=30,
                                                max_length_to_distance_ratio=2):
         """
-        plan from a start and a goal that are given in klampt 10d configuration space
+        plan from a start and a goal that are given in klampt 8d configuration space
         """
         self.robot.setConfig(start_config)
 
@@ -267,3 +284,13 @@ class NTableBlocksWorldMotionPlanner():
         box_obj = box(width=width, height=height, depth=depth, center=position)
         rigid_obj.geometry().set(box_obj)
 
+
+def check_if_in_colab():
+    """
+    check if the code is running in google colab
+    """
+    try:
+        import google.colab
+        return True
+    except:
+        return False

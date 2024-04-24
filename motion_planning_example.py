@@ -33,7 +33,7 @@ if __name__ == '__main__':
         planner.add_block(name, pos)
 
     if mp_vis:
-        planner.open_vis()
+        planner.visualize()
 
     red_box_pos = env.get_object_pos('block 1 red')
     yellow_box_pos = env.get_object_pos('block 2 yellow')
