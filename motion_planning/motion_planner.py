@@ -74,6 +74,12 @@ class NTableBlocksWorldMotionPlanner():
             start_config = self.config6d_to_klampt(start_config)
         return self.klampt_to_config6d(self._ik_solve_klampt(goal_pos, goal_R, start_config))
 
+    def set_config(self, config):
+        """
+        set the robot to a configuration
+        """
+        self.robot.setConfig(self.config6d_to_klampt(config))
+
     def config6d_to_klampt(self, config):
         """
         There are 8 links in our rob for klampt, some are stationary, actual joints are 1:7
@@ -123,6 +129,7 @@ class NTableBlocksWorldMotionPlanner():
         assert self._in_colab, "This function is meant to be used in google colab"
 
         path_klampt = [self.config6d_to_klampt(q) for q in path]
+        self.robot.setConfig(path_klampt[0])
 
         vis.init("HTML")
         vis.add("world", self.world)
