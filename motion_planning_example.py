@@ -1,6 +1,7 @@
 import numpy as np
 from n_table_blocks_world.n_table_blocks_world import NTableBlocksWorld
 from motion_planning.motion_planner import NTableBlocksWorldMotionPlanner
+from klampt import vis
 
 
 facing_down_R = [[0, 0, -1], [0, 1, 0], [1, 0, 0]]
@@ -20,6 +21,8 @@ if __name__ == '__main__':
     mp_vis = True
     tol = 0.05
     vel = 0.1
+
+    vis.init("HTML")
 
     env = NTableBlocksWorld()
     planner = NTableBlocksWorldMotionPlanner(env)

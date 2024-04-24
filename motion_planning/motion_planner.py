@@ -31,8 +31,8 @@ class NTableBlocksWorldMotionPlanner():
         self.robot = self.world.robot(0)
         self.ee_link = self.robot.link("ee_link")
 
-        # values are imported from configuration file
-        self.robot.setJointLimits(limits_l, limits_h)
+        # values are imported from configuration
+        self.robot.setJointLimits(limits_l[1:9], limits_h[1:9])  # TODO change in config file to 8d
         self.planning_config = default_config
 
     def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=30, max_length_to_distance_ratio=2):
@@ -77,15 +77,15 @@ class NTableBlocksWorldMotionPlanner():
         """
         There are 10 links in our URDF for klampt, some are stationary, actual joints are 2:8
         """
-        config_klampt = [0] * 10
-        config_klampt[2:8] = config
+        config_klampt = [0] * 8
+        config_klampt[1:7] = config
         return config_klampt
 
     def klampt_to_config6d(self, config_klampt):
         """
         There are 10 links in our URDF for klampt, some are stationary, actual joints are 2:8
         """
-        return config_klampt[2:8]
+        return config_klampt[1:7]
 
     def path_klampt_to_config6d(self, path_klampt):
         """
@@ -109,7 +109,6 @@ class NTableBlocksWorldMotionPlanner():
         viewport.camera.rot = [0, -0.7, 2]
 
         vis.show()
-        pass
 
     def show_path_vis(self, path):
         """
