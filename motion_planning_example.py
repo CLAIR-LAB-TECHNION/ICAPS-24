@@ -22,7 +22,7 @@ if __name__ == '__main__':
     tol = 0.05
     vel = 0.1
 
-    vis.init("HTML")
+    # vis.init("HTML")
 
     env = NTableBlocksWorld()
     planner = NTableBlocksWorldMotionPlanner(env)
@@ -30,9 +30,7 @@ if __name__ == '__main__':
     state = env.reset()
     blocks = state['object_positions']
     for name, pos in blocks.items():
-        color_name = name.split(' ')[-1]
-        color = colors[color_name]
-        planner.add_block(name, pos, color)
+        planner.add_block(name, pos)
 
     if mp_vis:
         planner.open_vis()

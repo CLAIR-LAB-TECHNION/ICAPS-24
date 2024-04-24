@@ -252,7 +252,7 @@ class NTableBlocksWorldMotionPlanner():
         if update_vis:
             vis.add("world", self.world)
 
-    def add_block(self, name, position, color):
+    def add_block(self, name, position, color=(0.3, 0.3, 0.3, 0.8)):
         """
         add block to the world
         """
