@@ -8,7 +8,7 @@ mujoco_env_files = glob.glob('mujoco_env/assets/**/*', recursive=True)
 # remove mujoco_env prefix:
 mujoco_env_files = [f.replace('mujoco_env/', '') for f in mujoco_env_files]
 
-motion_planning_files = glob.glob('motion_planning/ur_description/**/*', recursive=True)
+motion_planning_files = glob.glob('motion_planning/ur5_rob/**/*', recursive=True)
 motion_planning_files = [f.replace('motion_planning/', '') for f in motion_planning_files]
 motion_planning_files.extend(['klampt_world.xml', "ur5.urdf"])
 
