@@ -1,5 +1,6 @@
 import numpy as np
 from n_table_blocks_world.object_manager import ObjectManager
+from n_table_blocks_world.configurations_and_constants import *
 
 
 class GraspManager():
@@ -60,7 +61,7 @@ class GraspManager():
         target_velocities = np.zeros(6)
 
         # add shift to target position to make sure object is a bit below end effector, but in ee frame
-        target_position_in_ee = np.array([0, 0, 0.01])
+        target_position_in_ee = np.array([0, 0, grasp_offset])
         target_position = target_position + self._ee_mj_data.xmat.reshape(3, 3).T @ target_position_in_ee
 
         self.object_manager.set_object_pose(self.attatched_object_name, target_position, target_orientation)

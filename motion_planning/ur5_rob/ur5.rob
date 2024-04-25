@@ -60,4 +60,4 @@ servoD	80 100 80 30 30 10
 dryFriction	0 0 0 0 0 0 
 viscousFriction	5 5 3 3 1 1
 
-noselfcollision 0 2    4 6  
+noselfcollision 0 2    4 6    6 7

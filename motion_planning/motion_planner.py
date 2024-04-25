@@ -31,6 +31,7 @@ class NTableBlocksWorldMotionPlanner():
 
         self.robot = self.world.robot(0)
         self.ee_link = self.robot.link("ee_link")
+        self._attach_box_to_ee()
 
         # values are imported from configuration
         self.robot.setJointLimits(limits_l, limits_h)
@@ -298,6 +299,18 @@ class NTableBlocksWorldMotionPlanner():
         width, depth, height = block_size
         box_obj = box(width=width, height=height, depth=depth, center=position)
         rigid_obj.geometry().set(box_obj)
+
+    def _attach_box_to_ee(self):
+        """
+        attach a box to the end effector for collision detection. Should be called once
+        """
+        # Note that the order is different here, width is in z direction
+        sx, sy, sz = block_size
+        box_obj = box(width=sz, height=sy, depth=sx, center=[grasp_offset, 0, 0])
+        box_geom = Geometry3D()
+        box_geom.set(box_obj)
+
+        self.ee_link.geometry().set(box_geom)
 
 
 def check_if_in_colab():
