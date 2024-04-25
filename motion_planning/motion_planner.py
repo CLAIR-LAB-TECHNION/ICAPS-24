@@ -126,7 +126,7 @@ class NTableBlocksWorldMotionPlanner():
         """
         visualize a path, this one is meant to be used in google colab, it will initialize a new window
         """
-        assert self._in_colab, "This function is meant to be used in google colab"
+        assert self._in_colab, "This method is meant to be used in google colab"
 
         path_klampt = [self.config6d_to_klampt(q) for q in path]
         self.robot.setConfig(path_klampt[0])
@@ -134,7 +134,12 @@ class NTableBlocksWorldMotionPlanner():
         vis.init("HTML")
         vis.add("world", self.world)
         vis.add("path", path_klampt)
-        vis.setColor("path", 0, 1, 0, 1)
+        vis.setColor("path", 0.3, 1, 0.3, 0.7)
+
+        for config in path_klampt:
+            self.robot.setConfig(config)
+            vis.stepAnimation(1)
+
         vis.show()
 
     def show_path_vis(self, path):
