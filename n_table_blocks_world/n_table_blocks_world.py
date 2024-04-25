@@ -1,4 +1,5 @@
 """ a wrapper around spear env to simplify and fix some issues with the environment """
+from copy import deepcopy
 
 import numpy as np
 import mujoco_env
@@ -80,7 +81,7 @@ class NTableBlocksWorld():
                  "gripper_state_closed": self.gripper_state_closed,
                  "object_positions": object_positions}
 
-        return state
+        return deepcopy(state)
 
     def get_object_pos(self, name: str):
         return self._object_manager.get_object_pos(name)
