@@ -71,6 +71,14 @@ class NTableBlocksWorld():
 
         return self.get_state()
 
+    def simulate_steps(self, n_steps):
+        """
+        simulate n_steps in the environment without moving the robot
+        """
+        config = self.robot_joint_pos
+        for _ in range(n_steps):
+            self.step(config)
+
     def render(self):
         return self._env.render()
 
