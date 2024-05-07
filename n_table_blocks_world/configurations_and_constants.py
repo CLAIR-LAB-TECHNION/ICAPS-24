@@ -34,7 +34,7 @@ env_cfg = dict(
 # for spear env
 
 INIT_CONFIG = np.array([0, -1.57, 0, 0, 0, 0])
-INIT_MAX_VELOCITY = np.array([2, 2, 2, 2, 2, 2])
+INIT_MAX_VELOCITY = np.array([1.5, 1.5, 1.5, 1.5, 1.5, 1.5])
 
 # relative position of grasped object from end effector
 grasp_offset = 0.02
