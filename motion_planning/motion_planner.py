@@ -36,7 +36,7 @@ class NTableBlocksWorldMotionPlanner():
         self.robot.setJointLimits(limits_l, limits_h)
         self.planning_config = default_config
 
-    def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=30, max_length_to_distance_ratio=2):
+    def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=15, max_length_to_distance_ratio=2):
         """
         plan from a start configuration to a goal pose that is given in 6d configuration space
         @param start_config: 6d configuration
@@ -51,7 +51,7 @@ class NTableBlocksWorldMotionPlanner():
 
         return self.path_klampt_to_config6d(path)
 
-    def plan_from_start_to_goal_config(self, start_config, goal_config, max_time=30, max_length_to_distance_ratio=2):
+    def plan_from_start_to_goal_config(self, start_config, goal_config, max_time=15, max_length_to_distance_ratio=2):
         """
         plan from a start and a goal that are given in 6d configuration space
         """
@@ -182,7 +182,7 @@ class NTableBlocksWorldMotionPlanner():
             print("no ik solution found")
         return self.robot.getConfig()
 
-    def _plan_from_config_to_pose_klampt(self, start_config, goal_pos, goal_R, max_time=30,
+    def _plan_from_config_to_pose_klampt(self, start_config, goal_pos, goal_R, max_time=15,
                                          max_length_to_distance_ratio=2):
         """
         plan from a start configuration to a goal pose that is given in klampt 8d configuration space
@@ -201,9 +201,9 @@ class NTableBlocksWorldMotionPlanner():
                                                             # extraConstraints=[space_reduction_constraint],
                                                             **self.planning_config)
         planner.space.eps = self.eps
-        return self._plan(planner, max_time, max_length_to_distance_ratio)
+        return self._plan(planner, max_time, max_length_to_distance_ratio=max_length_to_distance_ratio)
 
-    def _plan_from_start_to_goal_config_klampt(self, start_config, goal_config, max_time=30,
+    def _plan_from_start_to_goal_config_klampt(self, start_config, goal_config, max_time=15,
                                                max_length_to_distance_ratio=2):
         """
         plan from a start and a goal that are given in klampt 8d configuration space
@@ -214,9 +214,9 @@ class NTableBlocksWorldMotionPlanner():
                                                # extraConstraints=[space_reduction_constraint],
                                                **self.planning_config)
         planner.space.eps = self.eps
-        return self._plan(planner, max_time, max_length_to_distance_ratio)
+        return self._plan(planner, max_time, max_length_to_distance_ratio=max_length_to_distance_ratio)
 
-    def _plan(self, planner: MotionPlan, max_time=30, steps_per_iter=100, max_length_to_distance_ratio=2):
+    def _plan(self, planner: MotionPlan, max_time=15, steps_per_iter=150, max_length_to_distance_ratio=2):
         """
         find path given a prepared planner, with endpoints already set
         @param planner: MotionPlan object, endpoints already set
@@ -230,7 +230,7 @@ class NTableBlocksWorldMotionPlanner():
         path = None
         while (path is None or self.compute_path_length_to_distance_ratio(path) > max_length_to_distance_ratio) \
                 and time.time() - start_time < max_time:
-            # print("planning...")
+            print("planning...")
             planner.planMore(steps_per_iter)
             path = planner.getPath()
         if path is None:
