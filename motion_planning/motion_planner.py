@@ -230,7 +230,7 @@ class NTableBlocksWorldMotionPlanner():
         path = None
         while (path is None or self.compute_path_length_to_distance_ratio(path) > max_length_to_distance_ratio) \
                 and time.time() - start_time < max_time:
-            print("planning...")
+            # print("planning...")
             planner.planMore(steps_per_iter)
             path = planner.getPath()
         if path is None:
