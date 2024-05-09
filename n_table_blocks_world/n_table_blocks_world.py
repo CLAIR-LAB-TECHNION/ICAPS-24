@@ -26,6 +26,7 @@ class NTableBlocksWorld():
         self._object_manager = ObjectManager(self._mj_model, self._mj_data)
         self._grasp_manager = GraspManager(self._mj_model, self._mj_data, self._object_manager, min_grasp_distance=0.1)
 
+        self._ee_mj_data = self._mj_data.body('rethink_mount_stationary/ur5e/adhesive gripper/')
         # dt = self._mj_model.opt.timestep * frame_skip
         # self._pid_controller = PIDController(kp, ki, kd, dt)
 
@@ -149,3 +150,6 @@ class NTableBlocksWorld():
         self.robot_joint_pos = obs['robot_state'][:6]
         self.robot_joint_velocities = obs['robot_state'][6:12]
         self.gripper_state_closed = gripper_closed
+
+    def get_ee_pos(self):
+        return deepcopy(self._ee_mj_data.xpos)
