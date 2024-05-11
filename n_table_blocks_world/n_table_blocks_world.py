@@ -7,6 +7,7 @@ from n_table_blocks_world.PID_controller import PIDController
 from n_table_blocks_world.grasp_manager import GraspManager
 from n_table_blocks_world.object_manager import ObjectManager
 from n_table_blocks_world.configurations_and_constants import *
+from .utils import convert_mj_struct_to_namedtuple
 
 
 class NTableBlocksWorld():
@@ -88,7 +89,9 @@ class NTableBlocksWorld():
         state = {"robot_joint_pos": self.robot_joint_pos,
                  "robot_joint_velocities": self.robot_joint_velocities,
                  "gripper_state_closed": self.gripper_state_closed,
-                 "object_positions": object_positions}
+                 "object_positions": object_positions,
+                 "grasped_object": self._grasp_manager.attatched_object_name,
+                 "geom_contact": convert_mj_struct_to_namedtuple(self._env.sim.data.contact)}
 
         return deepcopy(state)
 
