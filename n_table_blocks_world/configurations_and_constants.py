@@ -21,6 +21,7 @@ env_cfg = dict(
     scene=dict(
         resource='3tableblocksworld',
         render_camera='top-right',
+        init_keyframe="home",
         # renderer_cfg={"width": 320, "height": 240},
     ),
     robot=dict(

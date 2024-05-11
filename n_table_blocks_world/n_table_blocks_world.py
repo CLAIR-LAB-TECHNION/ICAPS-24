@@ -37,14 +37,13 @@ class NTableBlocksWorld():
         self.max_joint_velocities = INIT_MAX_VELOCITY
 
         obs, _ = self._env.reset()
-        self._env_entity.set_state(position=INIT_CONFIG)
-        self.robot_joint_pos = INIT_CONFIG
+        self.robot_joint_pos = obs['robot_state'][:6]
         self.robot_joint_velocities = obs["robot_state"][6:12]
         self.gripper_state_closed = False
         self._grasp_manager.release_object()
         self._object_manager.reset_object_positions()
 
-        self.step(INIT_CONFIG, gripper_closed=False)
+        self.step(self.robot_joint_pos, gripper_closed=False)
 
         if self.render_mode == "human":
             self._env.render()
