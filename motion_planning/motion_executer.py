@@ -146,8 +146,9 @@ class NTableBlocksWorldMotionExecuter:
         frames = []
 
         # move to current position, i.e., stay in place
+        maintain_pos = self.env.robot_joint_pos
         for i in range(n_steps):
-            self.env.step(self.env.robot_joint_pos)
+            self.env.step(maintain_pos)
             if i % render_freq == 0:
                 frames.append(self.env.render())
 
