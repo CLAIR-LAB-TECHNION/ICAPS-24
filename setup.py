@@ -24,6 +24,7 @@ setup(
         'mujoco>=3.1.3',
         'PyYAML>=6.0.1',
         'aidm[pddl] @ git+https://github.com/CLAIR-LAB-TECHNION/aidm',
+        'mediapy'
     ],
     package_data={
         # 'mujoco_env': ["assets/scenes/3tableblocksworld/scene.xml"], # worked

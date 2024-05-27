@@ -14,6 +14,7 @@ install_requires =
     PyYAML>=6.0.1
     scipy>=1.13.0
     aidm[pddl] @ git+https://github.com/CLAIR-LAB-TECHNION/aidm
+    'mediapy'
 
 [options.package_data]
 mujoco_env = mujoco_env/assets/scenes/3tableblocksworld/*.xml
