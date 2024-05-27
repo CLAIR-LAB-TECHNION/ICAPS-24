@@ -1,4 +1,10 @@
 # Various stuff for our in-person participants
+
+## announced on Monday:
+- if you don't want your photos published (e.g., on ICAPS's X account), let us know ASAP as we might send them some soon.
+- (updated regularly)
+
+## announced on Sunday:
 - You were all invited to join our slack. Please join! People use it to coordinate getting out :) an we use it for some quick info.
 - Breakfast is from 7 am. Make sure to come early enough given our program constraints.
 - Don't forget your slide! (See below.)
