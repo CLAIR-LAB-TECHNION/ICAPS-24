@@ -1,6 +1,7 @@
 # Various stuff for our in-person participants
 - You were all invited to join our slack. Please join! People use it to coordinate getting out :) an we use it for some quick info.
 - Breakfast is from 7 am. Make sure to come early enough given our program constraints.
+- Don't forget your slide! (See below.)
 
 # Zoom links for lectures and labs:
 
