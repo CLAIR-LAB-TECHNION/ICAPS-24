@@ -2,10 +2,12 @@
 - You were all invited to join our slack. Please join! People use it to coordinate getting out :) an we use it for some quick info.
 - Breakfast is from 7 am. Make sure to come early enough given our program constraints.
 - Don't forget your slide! (See below.)
+- You need your badges to be allowed entry for breakfast, lunch, etc. You should have received them in the checkin (and can still get them there).
 
 # Zoom links for lectures and labs:
 
-... will be provided in time; come back soon! :)
+Note that talks will be recorded, so please make sure to disable video and microphone. Only enable if, at the end, you want to ask questions.
+https://technion.zoom.us/j/98366634820?pwd=UlBDV0tic0YrckhkcjZJVnJGTE40UT09
 
 # ICKEPS
 
