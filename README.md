@@ -1,8 +1,9 @@
 # Various stuff for our in-person participants
 
+(updated regularly)
+
 ## announced on Monday:
 - if you don't want your photos published (e.g., on ICAPS's X account), let us know ASAP as we might send them some soon.
-- (updated regularly)
 
 ## announced on Sunday:
 - You were all invited to join our slack. Please join! People use it to coordinate getting out :) an we use it for some quick info.
@@ -36,4 +37,6 @@ At the beginning of each notebook, there is a link to run it on Colab, called IC
 - 4: used on Friday (note that this isn't online yet!)
 
 If you would like to run the notebooks locally on your machine, you can download them, but some installations may be required (e.g., numpy).
+
+Otherwise, just click on "Open in Colab" at the top of each colab.
 
