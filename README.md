@@ -29,6 +29,11 @@ The tutorials are provided in the form of Jupyter notebooks, suitable for runnin
 All necessary installations are performed when running the first few cells of each notebook.
 The notebooks can be found here:
 https://github.com/CLAIR-LAB-TECHNION/ICAPS-24/tree/main/notebooks
-At the beginning of each notebook, there is a link to run it on Colab.
+At the beginning of each notebook, there is a link to run it on Colab, called ICAPS_SummerSchool_Labi.ipynb for i in {1,2,3,4}. You will need:
+- 1: used on Monday
+- 2: used on Tuesday
+- 3: used on Thursday
+- 4: used on Friday (note that this isn't online yet!)
 
 If you would like to run the notebooks locally on your machine, you can download them, but some installations may be required (e.g., numpy).
+
