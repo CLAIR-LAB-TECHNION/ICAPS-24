@@ -1,0 +1,105 @@
+<mujoco model="tableworld">
+    <compiler eulerseq="XYZ"/>
+    <statistic center="0.3 0 0.4" extent="0.8"/>
+
+    <visual>
+        <headlight diffuse="0.6 0.6 0.6" ambient="0.1 0.1 0.1" specular="0 0 0"/>
+        <rgba haze="0.15 0.25 0.35 1"/>
+        <global azimuth="120" elevation="-20"/>
+    </visual>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+        <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
+                 markrgb="0.8 0.8 0.8" width="300" height="300"/>
+        <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+
+    </asset>
+
+    <worldbody>
+        <light pos="0 0 1.5" dir="0 0 -1" directional="true"/>
+        <geom name="floor" pos="0.0 0.0 0.0" size="0 0 0.05" type="plane" material="groundplane"/>
+
+        <body name="table_left" pos="0.0 -0.6 0">
+            <geom name="table_left_top" type="box" size=".30 .30 .01" pos="0 0 .7"/>
+            <geom name="table_left_leg_1" type="cylinder" size=".01 .7" pos=".24 -.24 -.0" euler="0 0 0"/>
+            <geom name="table_left_leg_2" type="cylinder" size=".01 .7" pos=".24 .24 -.0" euler="0 0 0"/>
+            <geom name="table_left_leg_3" type="cylinder" size=".01 .7" pos="-.24 -.24 -.0" euler="0 0 0"/>
+            <geom name="table_left_leg_4" type="cylinder" size=".01 .7" pos="-.24 .24 -.0" euler="0 0 0"/>
+        </body>
+
+        <body name="table_right" pos="0 0.6 0">
+            <geom name="table_right_top" type="box" size=".30 .30 .01" pos="0 0 .7"/>
+            <geom name="table_right_leg_1" type="cylinder" size=".01 .7" pos=".24 -.24 -.0" euler="0 0 0"/>
+            <geom name="table_right_leg_2" type="cylinder" size=".01 .7" pos=".24 .24 -.0" euler="0 0 0"/>
+            <geom name="table_right_leg_3" type="cylinder" size=".01 .7" pos="-.24 -.24 -.0" euler="0 0 0"/>
+            <geom name="table_right_leg_4" type="cylinder" size=".01 .7" pos="-.24 .24 -.0" euler="0 0 0"/>
+        </body>
+
+        <body name="table_front" pos="0.6 0 0">
+            <geom name="table_front_top" type="box" size=".30 .30 .01" pos="0 0 .7"/>
+            <geom name="table_front_leg_1" type="cylinder" size=".01 .7" pos=".24 -.24 -.0" euler="0 0 0"/>
+            <geom name="table_front_leg_2" type="cylinder" size=".01 .7" pos=".24 .24 -.0" euler="0 0 0"/>
+            <geom name="table_front_leg_3" type="cylinder" size=".01 .7" pos="-.24 -.24 -.0" euler="0 0 0"/>
+            <geom name="table_front_leg_4" type="cylinder" size=".01 .7" pos="-.24 .24 -.0" euler="0 0 0"/>
+        </body>
+
+<!--        table right:     -->
+        <body name="block 1" pos="-0.1 0.55 0.73">
+            <freejoint name="block 1" />
+            <geom name="block 1" type="box" size=".05 .05 .02" rgba="1 0 0 1"/>
+        </body>
+
+        <body name="block 2" pos="0.8 -0.21 0.73">
+            <freejoint name="block 2"/>
+            <geom name="block 2" type="box" size=".05 .05 .02" rgba="1 1 0 1"/>
+        </body>
+
+        <body name="block 3" pos="0.81 0.21 0.73">
+            <freejoint name="block 3"/>
+            <geom name="block 3" type="box" size=".05 .05 .02" rgba="0 1 1 1"/>
+        </body>
+
+        <body name="block 4" pos="0.61 0.18 0.73">
+            <freejoint name="block 4"/>
+            <geom name="block 4" type="box" size=".05 .05 .02" rgba="1 0 1 1"/>
+        </body>
+
+<!--        table left   -->
+
+        <body name="block 5" pos="0.79 0.01 0.73">
+            <freejoint name="block 5"/>
+            <geom name="block 5" type="box" size=".05 .05 .02" rgba="1 0 0 1"/>
+        </body>
+
+        <body name="block 6" pos="0.44 0.19 0.73">
+            <freejoint name="block 6"/>
+            <geom name="block 6" type="box" size=".05 .05 .02" rgba="1 1 0 1"/>
+        </body>
+
+        <body name="block 7" pos="0.45 -0.2 0.73">
+            <freejoint name="block 7"/>
+            <geom name="block 7" type="box" size=".05 .05 .02" rgba="0 1 1 1"/>
+        </body>
+
+        <body name="block 8" pos="0.43 -0.01 0.73">
+            <freejoint name="block 8"/>
+            <geom name="block 8" type="box" size=".05 .05 .02" rgba="1 0 1 1"/>
+        </body>
+
+<!--        table front   -->
+        <body name="block 9" pos="0.6 0 0.73">
+            <freejoint name="block 9"/>
+            <geom name="block 9" type="box" size=".05 .05 .02" rgba="1 0 0 1"/>
+        </body>
+
+        <body name="block 10" pos="0.61 -0.21 0.73">
+            <freejoint name="block 10"/>
+            <geom name="block 10" type="box" size=".05 .05 .02" rgba="1 1 0 1"/>
+        </body>
+
+        <camera name="top-right" pos="2.5 1.2 2.5" euler="1 0 2"/>
+
+    </worldbody>
+
+</mujoco>

@@ -11,9 +11,9 @@ from .utils import convert_mj_struct_to_namedtuple
 
 
 class NTableBlocksWorld():
-    def __init__(self, render_mode="human"):
+    def __init__(self, render_mode="human", cfg=env_cfg):
         self.render_mode = render_mode
-        self._env = mujoco_env.from_cfg(cfg=env_cfg, render_mode=render_mode, frame_skip=frame_skip)
+        self._env = mujoco_env.from_cfg(cfg=cfg, render_mode=render_mode, frame_skip=frame_skip)
         obs, info = self._env.reset()  # once, for info, later again
         self._mj_model = info['priveleged']['model']
         self._mj_data = info['priveleged']['data']
