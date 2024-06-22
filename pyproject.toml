@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools >= 61.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["dependencies"]
+version = "0.0.0"
+name = "tamp-tut"
+authors = [
+    { name = "Sarah Keren", email = "sarahk@cs.technion.ac.il" },
+    { name = "Guy Azran", email = "guy.azran@campus.technion.ac.il" },
+    { name = "Yuval Goshen", email = "yuval.goshen@campus.technion.ac.il" },
+]
+description = "An ipython notebook based tutorial for TAMP"
+keywords = [
+    "Artificial Intelligence",
+    "Decision-Making",
+    "Classical Planning",
+    "Motion Planning",
+    "Task and Motion palnning"
+]
+readme = "README.md"
+requires-python = ">= 3.10"  # current version in google colab as of the making of this file
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python"
+]
+license = { file = "LICENSE.txt" }
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[project.urls]
+Repository = "https://github.com/CLAIR-LAB-TECHNION/aidm"
+
+[tool.setuptools.packages.find]
+exclude = ['assets', 'notebooks']
