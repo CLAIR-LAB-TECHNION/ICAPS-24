@@ -4,31 +4,49 @@ import numpy as np
 class ObjectManager:
     """convience class to manage graspable objects in the mujoco simulation"""
 
-    def __init__(self, mj_model, mj_data):
-        self._mj_model = mj_model
-        self._mj_data = mj_data
+    def __init__(self, sim):
+        self._mj_model = sim.model
+        self._mj_data = sim.data
 
-        # manipulated objects have 6dof free joint that must be named in the mcjf.
-        all_joint_names = [self._mj_model.joint(i).name for i in range(self._mj_model.njnt)]
+        self.object_names = []
+        self.object_mjcfs = {}
+        self.objects_mjdata_dict = {}
+        self.immovable_objects = {}
+        for spec in sim.scene.objects:
+            obj = sim.composer.get_object(spec, as_attachment_element=True)
+            obj_name = obj.full_identifier[:-1] if obj.full_identifier.endswith('/') else obj.full_identifier
+            self.object_names.append(obj_name)
+            self.object_mjcfs[obj_name] = obj
 
-        # all bodies that ends with "box"
-        self.object_names = [name for name in all_joint_names if name.startswith("block")]
-        self.objects_mjdata_dict = {name: self._mj_model.joint(name) for name in self.object_names}
+            joints = obj.find_all('joint')
+            if len(joints) == 0:
+                self.immovable_objects[obj_name] = obj
+                continue
+            base_joint = joints[0]
+            self.objects_mjdata_dict[obj_name] = self._mj_data.joint(base_joint.full_identifier)
 
         self.initial_positions_dict = self.get_all_object_positons_dict()
 
     def reset_object_positions(self):
-        for name, pos in self.initial_positions_dict.items():
-            self.set_object_pose(name, pos,[0, 1, 0, 0])
+        for name, (pos, quat) in self.initial_positions_dict.items():
+            if name in self.immovable_objects:
+                continue
+            self.set_object_pose(name, pos, quat)
 
     def get_all_object_positons_dict(self):
-        return {name: self.get_object_pos(name) for name in self.object_names}
+        object_poses = {name: (self.get_object_pos(name), self.get_object_quat(name)) for name in self.object_names
+                        if name not in self.immovable_objects}
+        object_poses.update({
+            name: (obj.pos, [1, 0, 0, 0]) for name, obj in self.immovable_objects.items()
+        })
+
+        return object_poses
 
     def get_object_pos(self, name: str):
-        return self._mj_data.joint(name).qpos[:3]
+        return self.objects_mjdata_dict[name].qpos[:3]
 
     def get_object_quat(self, name: str):
-        return self._mj_data.joint(name).qpos[3:7]
+        return self.objects_mjdata_dict[name].qpos[3:7]
 
     def set_object_pose(self, name: str, pos, quat):
         joint_id = self.objects_mjdata_dict[name].id

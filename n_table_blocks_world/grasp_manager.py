@@ -10,7 +10,8 @@ class GraspManager():
         self.object_manager = object_manager
         self.min_grasp_distance = min_grasp_distance
 
-        self.graspable_objects_names = object_manager.object_names
+        self.graspable_objects_names = [name for name in object_manager.object_names
+                                        if name not in object_manager.immovable_objects]
 
         self._ee_mj_data = self._mj_data.body('rethink_mount_stationary/ur5e/adhesive gripper/')
 

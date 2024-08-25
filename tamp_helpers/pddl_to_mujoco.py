@@ -4,40 +4,29 @@ import numpy as np
 # NOTE: PDDL is case-insensitive, and therefore most parsers default to lowercase object names.
 OBJECT_PDDL_ID_TO_MUJOCO_NAME = {
     # tables
-    't1': 'table_left_top',  # these are specifically the names for the table tops, not the entire table
-    't2': 'table_front_top',
-    't3': 'table_right_top',
+    'wood_table': 'table_left_top',  # these are specifically the names for the table tops, not the entire table
+    'white_table': 'table_front_top',
+    'black_table': 'table_right_top',
 
     # blocks
-    'b1': 'block 1',
-    'b2': 'block 2',
-    'b3': 'block 3',
-    'b4': 'block 4',
-    'b5': 'block 5',
-    'b6': 'block 6',
-    'b7': 'block 7',
-    'b8': 'block 8',
-    'b9': 'block 9',
-    'b10': 'block 10'
+    'red_block': 'cubeA',
+    'green_block': 'cubeB',
+    'blue_block': 'cubeC',
+    'yellow_block': 'cubeD',
+    'cyan_block': 'cubeE',
+    'purple_block': 'cubeF',
 }
 
 TABLE_PDDL_IDS = [
     pddl_id
     for pddl_id in OBJECT_PDDL_ID_TO_MUJOCO_NAME.keys()
-    if pddl_id.startswith('t')
+    if pddl_id.endswith('table')
 ]
 BLOCK_PDDL_IDS = [
     pddl_id
     for pddl_id in OBJECT_PDDL_ID_TO_MUJOCO_NAME.keys()
-    if pddl_id.startswith('b')
+    if pddl_id.endswith('block')
 ]
-
-COLOR_PDDL_ID_TO_RGBA_VALUE_IN_MUJOCO = {
-    'r': np.array([1, 0, 0, 1]),
-    'y': np.array([1, 1, 0, 1]),
-    'c': np.array([0, 1, 1, 1]),
-    'p': np.array([1, 0, 1, 1])
-}
 
 
 def pddl_id_to_mujoco_name(pddl_object_id):

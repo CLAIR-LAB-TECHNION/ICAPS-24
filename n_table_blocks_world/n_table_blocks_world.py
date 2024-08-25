@@ -2,7 +2,7 @@
 from copy import deepcopy
 
 import numpy as np
-import mujoco_env
+import gymjoco
 from n_table_blocks_world.PID_controller import PIDController
 from n_table_blocks_world.grasp_manager import GraspManager
 from n_table_blocks_world.object_manager import ObjectManager
@@ -13,7 +13,7 @@ from .utils import convert_mj_struct_to_namedtuple
 class NTableBlocksWorld():
     def __init__(self, render_mode="human", cfg=env_cfg):
         self.render_mode = render_mode
-        self._env = mujoco_env.from_cfg(cfg=cfg, render_mode=render_mode, frame_skip=frame_skip)
+        self._env = gymjoco.from_cfg(cfg=cfg, render_mode=render_mode, frame_skip=frame_skip)
         obs, info = self._env.reset()  # once, for info, later again
         self._mj_model = info['priveleged']['model']
         self._mj_data = info['priveleged']['data']
@@ -21,10 +21,11 @@ class NTableBlocksWorld():
 
         self.robot_joint_pos = None  # will be updated in reset
         self.robot_joint_velocities = None  # --""--
+        self.camera_renders = None
         self.gripper_state_closed = False  # --""--
         self.max_joint_velocities = INIT_MAX_VELOCITY
 
-        self._object_manager = ObjectManager(self._mj_model, self._mj_data)
+        self._object_manager = ObjectManager(self._env.sim)
         self._grasp_manager = GraspManager(self._mj_model, self._mj_data, self._object_manager, min_grasp_distance=0.1)
 
         self._ee_mj_data = self._mj_data.body('rethink_mount_stationary/ur5e/adhesive gripper/')
@@ -81,7 +82,10 @@ class NTableBlocksWorld():
             self.step(config)
 
     def render(self):
-        return self._env.render()
+        if self._env.render_mode is not None:
+            return self._env.render()
+
+        return None
 
     def get_state(self):
         object_positions = self._object_manager.get_all_object_positons_dict()
@@ -90,7 +94,8 @@ class NTableBlocksWorld():
                  "gripper_state_closed": self.gripper_state_closed,
                  "object_positions": object_positions,
                  "grasped_object": self._grasp_manager.attatched_object_name,
-                 "geom_contact": convert_mj_struct_to_namedtuple(self._env.sim.data.contact)}
+                 "geom_contact": convert_mj_struct_to_namedtuple(self._env.sim.data.contact),
+                 "camera_renders": self.camera_renders}
 
         return deepcopy(state)
 
@@ -151,6 +156,7 @@ class NTableBlocksWorld():
 
         self.robot_joint_pos = obs['robot_state'][:6]
         self.robot_joint_velocities = obs['robot_state'][6:12]
+        self.camera_renders = {k: obs[k] for k in obs if k.startswith('camera')}
         self.gripper_state_closed = gripper_closed
 
     def get_ee_pos(self):

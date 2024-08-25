@@ -19,7 +19,10 @@ class NTableBlocksWorldMotionExecuter:
 
         # update world model with blocks
         for name, pos in state['object_positions'].items():
-            self.motion_planner.add_block(name, pos)
+            obj_geoms = self.env._object_manager.object_mjcfs[name].find_all('geom')
+            for i, geom in enumerate(obj_geoms):
+                true_geom_size = self.env._env.sim.model.geom(geom.full_identifier).size
+                self.motion_planner._add_box_geom(name + f'__geom{i}', true_geom_size, pos[0], (0.3, 0.3, 0.3, 0.8))
 
     def move_to(self, target_config, tolerance=0.05, end_vel=0.1, max_steps=None,
                 render_freq=8):
@@ -58,7 +61,9 @@ class NTableBlocksWorldMotionExecuter:
     def update_blocks_positions(self):
         blocks_positions_dict= self.env.get_state()['object_positions']
         for name, pos in blocks_positions_dict.items():
-            self.motion_planner.move_block(name, pos)
+            obj_geoms = self.env._object_manager.object_mjcfs[name].find_all('geom')
+            for i, geom in enumerate(obj_geoms):
+                self.motion_planner.move_block(name + f'__geom{i}', geom.pos)
 
     def execute_path(self, path, tolerance=0.05, end_vel=0.1,
                      max_steps_per_section=200, render_freq=8):
@@ -113,7 +118,7 @@ class NTableBlocksWorldMotionExecuter:
 
         return success, frames
 
-    def move_above_block(self, block_name, offset=0.1,
+    def move_above_block(self, block_name, offset=0.13,
                          tolerance=0.05, end_vel=0.1, max_steps_per_section=400,
                          render_freq=8):
         """
