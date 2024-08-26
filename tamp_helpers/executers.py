@@ -1,7 +1,7 @@
 import numpy as np
 
 from motion_planning.motion_executer import NTableBlocksWorldMotionExecuter
-from .pddl_to_mujoco import pddl_id_to_mujoco_name
+from .pddl_to_mujoco import pddl_id_to_mujoco_name as pddl_to_mj_name, pddl_id_to_mujoco_entity as pddl_to_mj_ent
 from .table_sampling import sample_free_spot_on_table_for_block
 
 
@@ -9,20 +9,23 @@ from .table_sampling import sample_free_spot_on_table_for_block
 home_config = np.array([-1.5708, -1.5708, 1.5708, -1.5708, -1.5708, 0])
 
 class SkillExecuter:
-  def __init__(self, env, render_freq=0):
+  def __init__(self, env, pddl_id_to_mujoco_name=None, pddl_id_to_mujoco_entity=None, ids=None, render_freq=0):
       self.exec = NTableBlocksWorldMotionExecuter(env)
       self.render_freq = render_freq
+      self.pddl_id_to_mujoco_name = pddl_id_to_mujoco_name or pddl_to_mj_name
+      self.pddl_id_to_mujoco_entity = pddl_id_to_mujoco_entity or pddl_to_mj_ent
+      self.ids = ids
 
-  def pick_up(self, block_id, table_id):
+  def pick_up(self, item_id, table_id):
     # NOTE: we accept the table_id parameter but don't use it.
     # we do not need this parameter because we already have the position of each block from the simulator.
     # we keep the argument for compatibility with the PDDL action.
 
     # get block identifier in MuJoCo
-    block_name = pddl_id_to_mujoco_name(block_id)
+    item_name = self.pddl_id_to_mujoco_name(item_id)
 
     # move end-effector above the block
-    move_suc, move_frames = self.exec.move_above_block(block_name, render_freq=self.render_freq)
+    move_suc, move_frames = self.exec.move_above_block(item_name, render_freq=self.render_freq)
 
     # activate the gripper to grasp the object
     grasp_suc, grasp_frames = self.exec.activate_grasp(render_freq=self.render_freq)
@@ -31,7 +34,8 @@ class SkillExecuter:
 
   def put_down(self, block_id, table_id):
     # sample a collision free spot on the table
-    table_pos = sample_free_spot_on_table_for_block(table_id, block_id, self.exec.env)
+    table_pos = sample_free_spot_on_table_for_block(table_id, block_id, self.exec.env, self.pddl_id_to_mujoco_entity,
+                                                    ids=self.ids)
 
     # move end-effector with the block above the sampled spot on the table.
     move_suc, move_frames = self.exec.move_to_pose(table_pos, render_freq=self.render_freq)
@@ -43,7 +47,7 @@ class SkillExecuter:
 
   def stack(self, block1_id, block2_id):
     # get identifier in MuJoCo for the block on which to stack
-    block2_name = pddl_id_to_mujoco_name(block2_id)
+    block2_name = self.pddl_id_to_mujoco_name(block2_id)
 
     # move end-effector with the destination block
     move_suc, move_frames = self.exec.move_above_block(block2_name, render_freq=self.render_freq)
