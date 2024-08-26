@@ -2,7 +2,7 @@ import numpy as np
 
 from .pddl_to_mujoco import pddl_id_to_mujoco_entity, BLOCK_PDDL_IDS
 
-def sample_on_table(table_id, env, z_offset=0.1):
+def sample_on_table(table_id, env, z_offset=0.2):
   """
   sample (x, y, z) coordinates that are located on the given table.
   """

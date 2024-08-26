@@ -9,8 +9,9 @@ from .table_sampling import sample_free_spot_on_table_for_block
 home_config = np.array([-1.5708, -1.5708, 1.5708, -1.5708, -1.5708, 0])
 
 class SkillExecuter:
-  def __init__(self, env):
-    self.exec = NTableBlocksWorldMotionExecuter(env)
+  def __init__(self, env, render_freq=0):
+      self.exec = NTableBlocksWorldMotionExecuter(env)
+      self.render_freq = render_freq
 
   def pick_up(self, block_id, table_id):
     # NOTE: we accept the table_id parameter but don't use it.
@@ -21,7 +22,7 @@ class SkillExecuter:
     block_name = pddl_id_to_mujoco_name(block_id)
 
     # move end-effector above the block
-    move_suc, move_frames = self.exec.move_above_block(block_name)
+    move_suc, move_frames = self.exec.move_above_block(block_name, render_freq=self.render_freq)
 
     # activate the gripper to grasp the object
     grasp_suc, grasp_frames = self.exec.activate_grasp()
@@ -33,7 +34,7 @@ class SkillExecuter:
     table_pos = sample_free_spot_on_table_for_block(table_id, block_id, self.exec.env)
 
     # move end-effector with the block above the sampled spot on the table.
-    move_suc, move_frames = self.exec.move_to_pose(table_pos)
+    move_suc, move_frames = self.exec.move_to_pose(table_pos, render_freq=self.render_freq)
 
     # deactivate the girpper to release the object
     grasp_suc, grasp_frames = self.exec.deactivate_grasp()
@@ -45,7 +46,7 @@ class SkillExecuter:
     block2_name = pddl_id_to_mujoco_name(block2_id)
 
     # move end-effector with the destination block
-    move_suc, move_frames = self.exec.move_above_block(block2_name)
+    move_suc, move_frames = self.exec.move_above_block(block2_name, render_freq=self.render_freq)
 
     # deactivate the girpper to release the object
     grasp_suc, grasp_frames = self.exec.deactivate_grasp()

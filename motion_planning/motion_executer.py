@@ -51,7 +51,7 @@ class NTableBlocksWorldMotionExecuter:
             joint_positions = state['robot_joint_pos']
             joint_velocities = state['robot_joint_velocities']
 
-            if i % render_freq == 0:
+            if render_freq and i % render_freq == 0:
                 frames.append(self.env.render())
 
             i += 1
@@ -118,7 +118,7 @@ class NTableBlocksWorldMotionExecuter:
 
         return success, frames
 
-    def move_above_block(self, block_name, offset=0.13,
+    def move_above_block(self, block_name, offset=0.12,
                          tolerance=0.05, end_vel=0.1, max_steps_per_section=400,
                          render_freq=8):
         """
@@ -154,7 +154,7 @@ class NTableBlocksWorldMotionExecuter:
         maintain_pos = self.env.robot_joint_pos
         for i in range(n_steps):
             self.env.step(maintain_pos)
-            if i % render_freq == 0:
+            if render_freq and i % render_freq == 0:
                 frames.append(self.env.render())
 
         # account for falling objects
