@@ -25,7 +25,7 @@ class SkillExecuter:
     move_suc, move_frames = self.exec.move_above_block(block_name, render_freq=self.render_freq)
 
     # activate the gripper to grasp the object
-    grasp_suc, grasp_frames = self.exec.activate_grasp()
+    grasp_suc, grasp_frames = self.exec.activate_grasp(render_freq=self.render_freq)
 
     return move_suc and grasp_suc, np.concatenate([move_frames, grasp_frames])
 
@@ -37,7 +37,7 @@ class SkillExecuter:
     move_suc, move_frames = self.exec.move_to_pose(table_pos, render_freq=self.render_freq)
 
     # deactivate the girpper to release the object
-    grasp_suc, grasp_frames = self.exec.deactivate_grasp()
+    grasp_suc, grasp_frames = self.exec.deactivate_grasp(render_freq=self.render_freq)
 
     return move_suc and grasp_suc, np.concatenate([move_frames, grasp_frames])
 
@@ -49,7 +49,7 @@ class SkillExecuter:
     move_suc, move_frames = self.exec.move_above_block(block2_name, render_freq=self.render_freq)
 
     # deactivate the girpper to release the object
-    grasp_suc, grasp_frames = self.exec.deactivate_grasp()
+    grasp_suc, grasp_frames = self.exec.deactivate_grasp(render_freq=self.render_freq)
 
     return move_suc and grasp_suc, np.concatenate([move_frames, grasp_frames])
 
