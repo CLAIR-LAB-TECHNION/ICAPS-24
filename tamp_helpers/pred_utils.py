@@ -15,7 +15,10 @@ def entity_is_on_entity(entity1, entity2, state):
   # determine whether the calculated distance is "close enough" to 0 using the `np.isclose` function
   # this function returns True if the distance we calculated is close to 0.
   # the default tolerance is 1e-08. this is too strict for us so we will change this to 0.1
-  return np.isclose(normal_dist_from_up_dir, 0, atol=0.1)
+  is_up_normal = np.isclose(normal_dist_from_up_dir, 0, atol=0.1)
+
+  # force bool type return value (np.isclose returns np.bool_)
+  return bool(is_up_normal)
 
 
 def get_predicate_object(predicate_name, **vars):
