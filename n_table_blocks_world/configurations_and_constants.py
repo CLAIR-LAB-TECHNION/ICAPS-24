@@ -1,6 +1,8 @@
 import numpy as np
 from gymjoco.tasks.null_task import NullTask
 
+ROBOTIQ_2F85_BODY = 'rethink_mount_stationary/ur5e/robotiq_2f85/'
+ADHESIVE_BODY = 'rethink_mount_stationary/ur5e/adhesive gripper/'
 
 block_size = [0.4, 0.4, 0.4]
 # blocks are configured at spear_env/assets/scenes/3tableblocksworld/scene.xml
@@ -38,7 +40,8 @@ INIT_CONFIG = np.array([0, -1.57, 0, 0, 0, 0])
 INIT_MAX_VELOCITY = np.array([1.5, 1.5, 1.5, 1.5, 1.5, 1.5])
 
 # relative position of grasped object from end effector
-grasp_offset = 0.02
+DEFAULT_GRASP_OFFSET = 0.02
+
 
 
 frame_skip = 5
@@ -55,3 +58,4 @@ frame_skip = 5
 # kd = [200, 200, 200, 50, 50, 50]
 # ki = [20, 100, 100, 20, 20, 20]
 # code PID might work with shorter timestep...
+

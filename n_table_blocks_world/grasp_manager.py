@@ -1,10 +1,12 @@
 import numpy as np
 from n_table_blocks_world.object_manager import ObjectManager
 from n_table_blocks_world.configurations_and_constants import *
+from scipy.spatial.transform import Rotation
 
 
 class GraspManager():
-    def __init__(self, mj_model, mj_data, object_manager: ObjectManager, min_grasp_distance=0.15):
+    def __init__(self, mj_model, mj_data, object_manager: ObjectManager, min_grasp_distance=0.1,
+                 ee_name='rethink_mount_stationary/ur5e/adhesive gripper/'):
         self._mj_model = mj_model
         self._mj_data = mj_data
         self.object_manager = object_manager
@@ -13,7 +15,7 @@ class GraspManager():
         self.graspable_objects_names = [name for name in object_manager.object_names
                                         if name not in object_manager.immovable_objects]
 
-        self._ee_mj_data = self._mj_data.body('rethink_mount_stationary/ur5e/adhesive gripper/')
+        self._ee_mj_data = self._mj_data.body(ee_name)
 
         self.attatched_object_name = None
 
@@ -36,12 +38,12 @@ class GraspManager():
         else:
             return False
 
-    def grasp_object(self, object_name):
+    def grasp_object(self, object_name, offset=None):
         """
         attatch this object to the gripper position
         """
         self.attatched_object_name = object_name
-        self.update_grasped_object_pose()
+        self.update_grasped_object_pose(offset)
 
     def release_object(self):
         """
@@ -49,21 +51,29 @@ class GraspManager():
         """
         self.attatched_object_name = None
 
-    def update_grasped_object_pose(self):
+    def update_grasped_object_pose(self, grasp_offset=None):
         """
         update the pose of the object that is currently grasped to be on the gripper
         """
+        grasp_offset = grasp_offset or DEFAULT_GRASP_OFFSET
+
         if self.attatched_object_name is None:
             return
 
         target_position = self._ee_mj_data.xpos
         target_orientation = self._ee_mj_data.xquat
+
+        target_quat_rot = Rotation.from_quat(target_orientation)
+        target_euler = target_quat_rot.as_euler('xyz', degrees=True)
+        target_eular_rot = Rotation.from_euler('xyz', target_euler + np.array([0, 180, 0]), degrees=True)
+        target_orientation = target_eular_rot.as_quat()
+
         target_velocities = self._ee_mj_data.cvel
         target_velocities = np.zeros(6)
 
         # add shift to target position to make sure object is a bit below end effector, but in ee frame
         target_position_in_ee = np.array([0, 0, grasp_offset])
-        target_position = target_position + self._ee_mj_data.xmat.reshape(3, 3).T @ target_position_in_ee
+        target_position = target_position + self._ee_mj_data.xmat.reshape(3, 3) @ target_position_in_ee
 
         self.object_manager.set_object_pose(self.attatched_object_name, target_position, target_orientation)
         self.object_manager.set_object_vel(self.attatched_object_name, target_velocities)

@@ -305,7 +305,7 @@ class NTableBlocksWorldMotionPlanner():
         """
         # Note that the order is different here, width is in z direction
         sx, sy, sz = block_size
-        box_obj = box(width=sz, height=sy, depth=sx, center=[grasp_offset, 0, 0])
+        box_obj = box(width=sz, height=sy, depth=sx, center=[DEFAULT_GRASP_OFFSET, 0, 0])
         box_geom = Geometry3D()
         box_geom.set(box_obj)
 

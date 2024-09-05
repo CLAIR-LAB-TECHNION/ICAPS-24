@@ -71,19 +71,19 @@ def is_pos_colliding(block_id, sampled_pos, env, pddl_to_mj, ids, skip_self=True
   return False
 
 
-def sample_free_spot_on_table_for_block(table_id, block_id, env, pddl_to_mj=None, ids=None, max_attempts=1_000, skip_self=True):
+def sample_free_spot_on_table_for_block(table_id, block_id, env, pddl_to_mj=None, z_offset=0.2, ids=None, max_attempts=1_000, skip_self=True):
   """
   samples a spot on a given table to place a given block such that there is no collision
   with another block. Will sample `max_attempts` times before raising an error.
   """
   # sample first attempt
   attempt = 0
-  sampled_pos = sample_on_table(table_id, env, pddl_to_mj)
+  sampled_pos = sample_on_table(table_id, env, pddl_to_mj, z_offset)
 
   # continue sampling until a good position is found or until the maximum number of attempts
   # is reached.
   while is_pos_colliding(block_id, sampled_pos, env, pddl_to_mj, ids, skip_self) and attempt < max_attempts:
-    sampled_pos = sample_on_table(table_id, env, pddl_to_mj)
+    sampled_pos = sample_on_table(table_id, env, pddl_to_mj, z_offset)
     attempt += 1
 
   # check for failure based on number of attempts.

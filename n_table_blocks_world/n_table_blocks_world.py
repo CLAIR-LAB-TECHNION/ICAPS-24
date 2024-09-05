@@ -1,34 +1,54 @@
 """ a wrapper around spear env to simplify and fix some issues with the environment """
 from copy import deepcopy
 
-import numpy as np
 import gymjoco
-from n_table_blocks_world.PID_controller import PIDController
 from n_table_blocks_world.grasp_manager import GraspManager
 from n_table_blocks_world.object_manager import ObjectManager
 from n_table_blocks_world.configurations_and_constants import *
+from .configurations_and_constants import ROBOTIQ_2F85_BODY, ADHESIVE_BODY
 from .utils import convert_mj_struct_to_namedtuple
+from collections import defaultdict
 
 
-class NTableBlocksWorld():
-    def __init__(self, render_mode="human", cfg=env_cfg):
+class NTableBlocksWorld:
+    def __init__(self, render_mode="human", cfg=env_cfg, ee_name=ADHESIVE_BODY,
+                 grasp_joints=None, grasp_offsets=None):
         self.render_mode = render_mode
+        self.ee_name = ee_name
+        self.grasp_joints = grasp_joints or defaultdict(lambda: 0)
+        self.grasp_offsets = grasp_offsets or defaultdict(lambda: DEFAULT_GRASP_OFFSET)
         self._env = gymjoco.from_cfg(cfg=cfg, render_mode=render_mode, frame_skip=frame_skip)
         obs, info = self._env.reset()  # once, for info, later again
-        self._mj_model = info['priveleged']['model']
-        self._mj_data = info['priveleged']['data']
+        self._mj_model = info['privileged']['model']
+        self._mj_data = info['privileged']['data']
         self._env_entity = self._env.agent.entity
-
         self.robot_joint_pos = None  # will be updated in reset
         self.robot_joint_velocities = None  # --""--
         self.camera_renders = None
         self.gripper_state_closed = False  # --""--
         self.max_joint_velocities = INIT_MAX_VELOCITY
-
         self._object_manager = ObjectManager(self._env.sim)
-        self._grasp_manager = GraspManager(self._mj_model, self._mj_data, self._object_manager, min_grasp_distance=0.1)
+        self._grasp_manager = GraspManager(self._mj_model, self._mj_data, self._object_manager, min_grasp_distance=0.2,
+                                           ee_name=ee_name)
+        self._ee_mj_data = self._mj_data.body(ee_name)
 
-        self._ee_mj_data = self._mj_data.body('rethink_mount_stationary/ur5e/adhesive gripper/')
+        self.__vel_size = len(self._env_entity.get_joint_velocities())
+
+        # Collision avoidance for gripper
+        # self._avoid_gripper_collisions()
+
+        if ee_name == ROBOTIQ_2F85_BODY:
+            self.gripper_body = self._env.sim.get_entity(ROBOTIQ_2F85_BODY, 'body')
+            gripper_mjcf = self.gripper_body.mjcf_element
+            geoms = gripper_mjcf.find_all('geom')
+            for geom in geoms:
+                geom_id = self._mj_model.geom(geom.full_identifier).id
+                # This geom belongs to the gripper
+                # Set its collision type to the gripper group
+                self._mj_model.geom_contype[geom_id] = 0
+                # Clear its collision affinity (it won't collide with anything)
+                self._mj_model.geom_conaffinity[geom_id] = 0
+
         # dt = self._mj_model.opt.timestep * frame_skip
         # self._pid_controller = PIDController(kp, ki, kd, dt)
 
@@ -38,8 +58,9 @@ class NTableBlocksWorld():
         self.max_joint_velocities = INIT_MAX_VELOCITY
 
         obs, _ = self._env.reset()
+        robot_vel_start_idx = len(obs["robot_state"])
         self.robot_joint_pos = obs['robot_state'][:6]
-        self.robot_joint_velocities = obs["robot_state"][6:12]
+        self.robot_joint_velocities = obs["robot_state"][robot_vel_start_idx:robot_vel_start_idx + 6]
         self.gripper_state_closed = False
         self._grasp_manager.release_object()
         self._object_manager.reset_object_positions()
@@ -62,11 +83,17 @@ class NTableBlocksWorld():
 
         if gripper_closed:
             if self._grasp_manager.attatched_object_name is not None:
-                self._grasp_manager.update_grasped_object_pose()
+                grasp_offset = self.grasp_offsets[self._grasp_manager.attatched_object_name]
+                self._grasp_manager.update_grasped_object_pose(grasp_offset)
+                if self.ee_name == ROBOTIQ_2F85_BODY:
+                    grasp_pincher_pos = self.grasp_joints[self._grasp_manager.attatched_object_name]
+                    self.gripper_body.configure_joints(position=[0, 0, grasp_pincher_pos, 0, 0, 0, grasp_pincher_pos, 0])
             else:
                 self._grasp_manager.grasp_nearest_object_if_close_enough()
         else:
             self._grasp_manager.release_object()
+            if self.ee_name == ROBOTIQ_2F85_BODY:
+                self.gripper_body.configure_joints(position=[0, 0, 0, 0, 0, 0, 0, 0])
 
         if self.render_mode == "human":
             self._env.render()
@@ -136,6 +163,7 @@ class NTableBlocksWorld():
     def _clip_joint_velocities(self):
         new_vel = self.robot_joint_velocities.copy()
         new_vel = np.clip(new_vel, -self.max_joint_velocities, self.max_joint_velocities)
+        new_vel = np.concatenate((new_vel, np.zeros(self.__vel_size - len(new_vel))))
         self._env_entity.set_state(velocity=new_vel)
         self.robot_joint_velocities = new_vel
 
@@ -154,8 +182,9 @@ class NTableBlocksWorld():
 
         obs, r, term, trunc, info = self._env.step(action)
 
+        robot_vel_start_idx = len(obs['robot_state']) // 2
         self.robot_joint_pos = obs['robot_state'][:6]
-        self.robot_joint_velocities = obs['robot_state'][6:12]
+        self.robot_joint_velocities = obs['robot_state'][robot_vel_start_idx:robot_vel_start_idx+6]
         self.camera_renders = {k: obs[k] for k in obs if k.startswith('camera')}
         self.gripper_state_closed = gripper_closed
 
