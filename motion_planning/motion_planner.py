@@ -14,11 +14,13 @@ import os
 
 
 class NTableBlocksWorldMotionPlanner():
-    def __init__(self, eps=1e-2):
+    def __init__(self, eps=1e-2, seed=None):
         """
         parameters:
         eps: epsilon gap for collision checking along the line in configuration space. Too high value may lead to
             collision, too low value may lead to slow planning. Default value is 1e-2.
+        seed: optional integer seed for the Klampt RRT* planner's internal RNG. When set, motion planning
+            becomes deterministic for identical start/goal configurations.
         """
         self.eps = eps
         self._in_colab = check_if_in_colab()
@@ -34,7 +36,9 @@ class NTableBlocksWorldMotionPlanner():
 
         # values are imported from configuration
         self.robot.setJointLimits(limits_l, limits_h)
-        self.planning_config = default_config
+        self.planning_config = dict(default_config)
+        if seed is not None:
+            self.planning_config["seed"] = seed
 
     def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=15, max_length_to_distance_ratio=2):
         """

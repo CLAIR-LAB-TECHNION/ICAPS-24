@@ -8,9 +8,9 @@ FACING_DOWN_R = [[0, 0, -1],
 
 
 class NTableBlocksWorldMotionExecuter:
-    def __init__(self, env):
+    def __init__(self, env, seed=None):
         self.env = env
-        self.motion_planner = NTableBlocksWorldMotionPlanner()
+        self.motion_planner = NTableBlocksWorldMotionPlanner(seed=seed)
 
         state = self.env.get_state()
 
