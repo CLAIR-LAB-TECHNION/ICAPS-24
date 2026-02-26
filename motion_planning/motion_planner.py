@@ -6,7 +6,7 @@ from klampt import vis
 from klampt.plan.cspace import MotionPlan
 from klampt.plan.robotcspace import RobotCSpace
 from klampt.model.collide import WorldCollider
-from klampt.plan import robotplanning
+from klampt.plan import robotplanning, motionplanning
 from klampt.model import ik
 from n_table_blocks_world.configurations_and_constants import *
 from motion_planning.configurations import limits_l, limits_h, default_config
@@ -19,8 +19,8 @@ class NTableBlocksWorldMotionPlanner():
         parameters:
         eps: epsilon gap for collision checking along the line in configuration space. Too high value may lead to
             collision, too low value may lead to slow planning. Default value is 1e-2.
-        seed: optional integer seed for the Klampt RRT* planner's internal RNG. When set, motion planning
-            becomes deterministic for identical start/goal configurations.
+        seed: optional integer seed for Klamp't's RNG used by RobotModel.randomizeConfig() and
+            sampling-based motion planners. Applied once at construction.
         """
         self.eps = eps
         self._in_colab = check_if_in_colab()
@@ -38,7 +38,7 @@ class NTableBlocksWorldMotionPlanner():
         self.robot.setJointLimits(limits_l, limits_h)
         self.planning_config = dict(default_config)
         if seed is not None:
-            self.planning_config["seed"] = seed
+            motionplanning.set_random_seed(seed)
 
     def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=15, max_length_to_distance_ratio=2):
         """
