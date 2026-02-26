@@ -54,11 +54,11 @@ class NTableBlocksWorld:
 
         self.reset()
 
-    def reset(self):
+    def reset(self, seed=None):
         self.max_joint_velocities = INIT_MAX_VELOCITY
 
-        obs, _ = self._env.reset()
-        robot_vel_start_idx = len(obs["robot_state"])
+        obs, _ = self._env.reset(seed=seed)
+        robot_vel_start_idx = len(obs["robot_state"]) // 2
         self.robot_joint_pos = obs['robot_state'][:6]
         self.robot_joint_velocities = obs["robot_state"][robot_vel_start_idx:robot_vel_start_idx + 6]
         self.gripper_state_closed = False
