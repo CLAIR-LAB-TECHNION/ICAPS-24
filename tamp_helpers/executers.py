@@ -9,8 +9,9 @@ from .table_sampling import sample_free_spot_on_table_for_block
 home_config = np.array([-1.5708, -1.5708, 1.5708, -1.5708, -1.5708, 0])
 
 class SkillExecuter:
-  def __init__(self, env, pddl_id_to_mujoco_name=None, pddl_id_to_mujoco_entity=None, ids=None, render_freq=0):
-      self.exec = NTableBlocksWorldMotionExecuter(env)
+  def __init__(self, env, pddl_id_to_mujoco_name=None, pddl_id_to_mujoco_entity=None, ids=None, render_freq=0, seed=None):
+      self.exec = NTableBlocksWorldMotionExecuter(env, seed=seed)
+      self.rng = np.random.default_rng(seed)
       self.render_freq = render_freq
       self.pddl_id_to_mujoco_name = pddl_id_to_mujoco_name or pddl_to_mj_name
       self.pddl_id_to_mujoco_entity = pddl_id_to_mujoco_entity or pddl_to_mj_ent
@@ -35,7 +36,7 @@ class SkillExecuter:
   def put_down(self, block_id, table_id):
     # sample a collision free spot on the table
     table_pos = sample_free_spot_on_table_for_block(table_id, block_id, self.exec.env, self.pddl_id_to_mujoco_entity,
-                                                    ids=self.ids)
+                                                    ids=self.ids, rng=self.rng)
 
     # move end-effector with the block above the sampled spot on the table.
     move_suc, move_frames = self.exec.move_to_pose(table_pos, render_freq=self.render_freq)

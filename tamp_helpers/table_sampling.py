@@ -2,7 +2,7 @@ import numpy as np
 
 from .pddl_to_mujoco import pddl_id_to_mujoco_entity, BLOCK_PDDL_IDS
 
-def sample_on_table(table_id, env, pddl_to_mj=None, z_offset=0.2):
+def sample_on_table(table_id, env, pddl_to_mj=None, z_offset=0.2, rng=None):
   """
   sample (x, y, z) coordinates that are located on the given table.
   """
@@ -21,7 +21,8 @@ def sample_on_table(table_id, env, pddl_to_mj=None, z_offset=0.2):
 
   # z does not need to be sampled since the height of the table is consistent for all x,y values
   sample_z = z + z_size + z_offset
-  sample_x, sample_y = np.random.uniform(*np.array([x_range, y_range]).T)
+  _rng = rng if rng is not None else np.random
+  sample_x, sample_y = _rng.uniform(*np.array([x_range, y_range]).T)
 
   # return coordinates as numpy array
   return np.array([sample_x, sample_y, sample_z])
@@ -71,19 +72,19 @@ def is_pos_colliding(block_id, sampled_pos, env, pddl_to_mj, ids, skip_self=True
   return False
 
 
-def sample_free_spot_on_table_for_block(table_id, block_id, env, pddl_to_mj=None, z_offset=0.2, ids=None, max_attempts=1_000, skip_self=True):
+def sample_free_spot_on_table_for_block(table_id, block_id, env, pddl_to_mj=None, z_offset=0.2, ids=None, max_attempts=1_000, skip_self=True, rng=None):
   """
   samples a spot on a given table to place a given block such that there is no collision
   with another block. Will sample `max_attempts` times before raising an error.
   """
   # sample first attempt
   attempt = 0
-  sampled_pos = sample_on_table(table_id, env, pddl_to_mj, z_offset)
+  sampled_pos = sample_on_table(table_id, env, pddl_to_mj, z_offset, rng=rng)
 
   # continue sampling until a good position is found or until the maximum number of attempts
   # is reached.
   while is_pos_colliding(block_id, sampled_pos, env, pddl_to_mj, ids, skip_self) and attempt < max_attempts:
-    sampled_pos = sample_on_table(table_id, env, pddl_to_mj, z_offset)
+    sampled_pos = sample_on_table(table_id, env, pddl_to_mj, z_offset, rng=rng)
     attempt += 1
 
   # check for failure based on number of attempts.
