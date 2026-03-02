@@ -294,12 +294,12 @@ class NTableBlocksWorldMotionPlanner():
         """
         self._add_box_geom(name, block_size, position, color)
 
-    def move_block(self, name, position):
+    def move_block(self, name, position, size=None):
         """
         move block to position
         """
         rigid_obj = self.world.rigidObject(name)
-        width, depth, height = block_size
+        width, depth, height = size if size is not None else block_size
         box_obj = box(width=width, height=height, depth=depth, center=position)
         rigid_obj.geometry().set(box_obj)
 

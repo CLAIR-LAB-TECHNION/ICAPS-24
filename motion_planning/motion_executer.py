@@ -59,11 +59,14 @@ class NTableBlocksWorldMotionExecuter:
         return True, frames
 
     def update_blocks_positions(self):
-        blocks_positions_dict= self.env.get_state()['object_positions']
-        for name, pos in blocks_positions_dict.items():
+        state = self.env.get_state()
+        for name, pos in state['object_positions'].items():
             obj_geoms = self.env._object_manager.object_mjcfs[name].find_all('geom')
             for i, geom in enumerate(obj_geoms):
-                self.motion_planner.move_block(name + f'__geom{i}', geom.pos)
+                true_geom_size = self.env._env.sim.model.geom(geom.full_identifier).size
+                self.motion_planner.move_block(
+                    name + f'__geom{i}', pos[0], size=true_geom_size
+                )
 
     def execute_path(self, path, tolerance=0.05, end_vel=0.1,
                      max_steps_per_section=200, render_freq=8):
