@@ -8,8 +8,10 @@ FACING_DOWN_R = [[0, 0, -1],
 
 
 class NTableBlocksWorldMotionExecuter:
-    def __init__(self, env, seed=None):
+    def __init__(self, env, seed=None, max_plan_resources=15, use_plan_iterations=False):
         self.env = env
+        self.max_plan_resources = max_plan_resources
+        self.use_plan_iterations = use_plan_iterations
         self.motion_planner = NTableBlocksWorldMotionPlanner(seed=seed)
 
         state = self.env.get_state()
@@ -108,7 +110,9 @@ class NTableBlocksWorldMotionExecuter:
         """
         joint_state = self.env.robot_joint_pos
         path = self.motion_planner.plan_from_config_to_pose(joint_state, target_position,
-                                                       target_orientation)
+                                                       target_orientation,
+                                                       max_resources=self.max_plan_resources,
+                                                       use_iterations=self.use_plan_iterations)
         success, frames = self.execute_path(
                                        path,
                                        tolerance=tolerance,

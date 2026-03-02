@@ -40,29 +40,32 @@ class NTableBlocksWorldMotionPlanner():
         if seed is not None:
             motionplanning.set_random_seed(seed)
 
-    def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_time=15, max_length_to_distance_ratio=2):
+    def plan_from_config_to_pose(self, start_config, goal_pos, goal_R, max_resources=15,
+                                max_length_to_distance_ratio=2, use_iterations=False):
         """
         plan from a start configuration to a goal pose that is given in 6d configuration space
         @param start_config: 6d configuration
         @param goal_pos: ee position
         @param goal_R: ee orientation as a rotation matrix
-        @param max_time: maximum planning time
+        @param max_resources: resource budget (seconds or iterations, see use_iterations)
+        @param use_iterations: when True, max_resources is an iteration count; when False, wall-clock seconds
         @return: path in 6d configuration space
         """
         start_config_klampt = self.config6d_to_klampt(start_config)
-        path = self._plan_from_config_to_pose_klampt(start_config_klampt, goal_pos, goal_R, max_time,
-                                                     max_length_to_distance_ratio)
+        path = self._plan_from_config_to_pose_klampt(start_config_klampt, goal_pos, goal_R, max_resources,
+                                                     max_length_to_distance_ratio, use_iterations)
 
         return self.path_klampt_to_config6d(path)
 
-    def plan_from_start_to_goal_config(self, start_config, goal_config, max_time=15, max_length_to_distance_ratio=2):
+    def plan_from_start_to_goal_config(self, start_config, goal_config, max_resources=15,
+                                       max_length_to_distance_ratio=2, use_iterations=False):
         """
         plan from a start and a goal that are given in 6d configuration space
         """
         start_config_klampt = self.config6d_to_klampt(start_config)
         goal_config_klampt = self.config6d_to_klampt(goal_config)
-        path = self._plan_from_start_to_goal_config_klampt(start_config_klampt, goal_config_klampt, max_time,
-                                                           max_length_to_distance_ratio)
+        path = self._plan_from_start_to_goal_config_klampt(start_config_klampt, goal_config_klampt, max_resources,
+                                                           max_length_to_distance_ratio, use_iterations)
 
         return self.path_klampt_to_config6d(path)
 
@@ -186,14 +189,15 @@ class NTableBlocksWorldMotionPlanner():
             print("no ik solution found")
         return self.robot.getConfig()
 
-    def _plan_from_config_to_pose_klampt(self, start_config, goal_pos, goal_R, max_time=15,
-                                         max_length_to_distance_ratio=2):
+    def _plan_from_config_to_pose_klampt(self, start_config, goal_pos, goal_R, max_resources=15,
+                                         max_length_to_distance_ratio=2, use_iterations=False):
         """
         plan from a start configuration to a goal pose that is given in klampt 8d configuration space
         @param start_config: 8d configuration
         @param goal_pos: ee position
         @param goal_R: ee orientation as a rotation matrix
-        @param max_time: maximum planning time
+        @param max_resources: resource budget (seconds or iterations, see use_iterations)
+        @param use_iterations: when True, max_resources is an iteration count; when False, wall-clock seconds
         @return: path in 8d configuration space
         """
         self.robot.setConfig(start_config)
@@ -205,10 +209,11 @@ class NTableBlocksWorldMotionPlanner():
                                                             # extraConstraints=[space_reduction_constraint],
                                                             **self.planning_config)
         planner.space.eps = self.eps
-        return self._plan(planner, max_time, max_length_to_distance_ratio=max_length_to_distance_ratio)
+        return self._plan(planner, max_resources, max_length_to_distance_ratio=max_length_to_distance_ratio,
+                          use_iterations=use_iterations)
 
-    def _plan_from_start_to_goal_config_klampt(self, start_config, goal_config, max_time=15,
-                                               max_length_to_distance_ratio=2):
+    def _plan_from_start_to_goal_config_klampt(self, start_config, goal_config, max_resources=15,
+                                               max_length_to_distance_ratio=2, use_iterations=False):
         """
         plan from a start and a goal that are given in klampt 8d configuration space
         """
@@ -218,25 +223,40 @@ class NTableBlocksWorldMotionPlanner():
                                                # extraConstraints=[space_reduction_constraint],
                                                **self.planning_config)
         planner.space.eps = self.eps
-        return self._plan(planner, max_time, max_length_to_distance_ratio=max_length_to_distance_ratio)
+        return self._plan(planner, max_resources, max_length_to_distance_ratio=max_length_to_distance_ratio,
+                          use_iterations=use_iterations)
 
-    def _plan(self, planner: MotionPlan, max_time=15, steps_per_iter=150, max_length_to_distance_ratio=2):
-        """
-        find path given a prepared planner, with endpoints already set
+    def _plan(self, planner: MotionPlan, max_resources=15, steps_per_iter=150,
+              max_length_to_distance_ratio=2, use_iterations=False):
+        """Find path given a prepared planner, with endpoints already set.
+
         @param planner: MotionPlan object, endpoints already set
-        @param max_time: maximum planning time
-        @param steps_per_iter: steps per iteration
-        @param max_length_to_distance_ratio: maximum length of the pass to distance between start and goal. If there is
-            still time, the planner will continue to plan until this ratio is reached. This is to avoid long paths
-            where the robot just moves around because non-optimal paths are still possible.
+        @param max_resources: resource budget for planning. Interpreted as
+            wall-clock seconds when use_iterations is False, or as the
+            maximum number of planning loop iterations when use_iterations
+            is True. Each iteration performs steps_per_iter internal
+            planning steps.
+        @param steps_per_iter: planning steps per iteration
+        @param max_length_to_distance_ratio: if a path is found but its
+            length-to-distance ratio exceeds this value, planning continues
+            (until max_resources is exhausted) to find a shorter path.
+        @param use_iterations: when True, max_resources is treated as an
+            iteration count (deterministic); when False it is treated as
+            wall-clock seconds (nondeterministic).
         """
-        start_time = time.time()
         path = None
-        while (path is None or self.compute_path_length_to_distance_ratio(path) > max_length_to_distance_ratio) \
-                and time.time() - start_time < max_time:
-            # print("planning motion...")
+        iters = 0
+        start_time = None if use_iterations else time.time()
+        while (path is None or self.compute_path_length_to_distance_ratio(path) > max_length_to_distance_ratio):
+            if use_iterations:
+                if iters >= max_resources:
+                    break
+            else:
+                if time.time() - start_time >= max_resources:
+                    break
             planner.planMore(steps_per_iter)
             path = planner.getPath()
+            iters += 1
         if path is None:
             print("no path found")
         return path
