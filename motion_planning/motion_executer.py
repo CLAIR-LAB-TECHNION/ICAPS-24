@@ -23,8 +23,16 @@ class NTableBlocksWorldMotionExecuter:
         for name, pos in state['object_positions'].items():
             obj_geoms = self.env._object_manager.object_mjcfs[name].find_all('geom')
             for i, geom in enumerate(obj_geoms):
-                true_geom_size = self.env._env.sim.model.geom(geom.full_identifier).size
-                self.motion_planner._add_box_geom(name + f'__geom{i}', true_geom_size, pos[0], (0.3, 0.3, 0.3, 0.8))
+                # MuJoCo's geom.size is a half-extent measure (for boxes it's
+                # documented; for meshes it's the max |value| along each axis
+                # from the body origin). Klamp't's box() expects full
+                # dimensions, so we double here. Without this, the motion
+                # planner sees object collision boxes that are half the
+                # actual mesh size and routes the arm through tall items.
+                geom_full_size = np.array(
+                    self.env._env.sim.model.geom(geom.full_identifier).size
+                ) * 2.0
+                self.motion_planner._add_box_geom(name + f'__geom{i}', geom_full_size, pos[0], (0.3, 0.3, 0.3, 0.8))
 
     def move_to(self, target_config, tolerance=0.05, end_vel=0.1, max_steps=None,
                 render_freq=8):
@@ -65,9 +73,13 @@ class NTableBlocksWorldMotionExecuter:
         for name, pos in state['object_positions'].items():
             obj_geoms = self.env._object_manager.object_mjcfs[name].find_all('geom')
             for i, geom in enumerate(obj_geoms):
-                true_geom_size = self.env._env.sim.model.geom(geom.full_identifier).size
+                # See note in __init__: double the half-extent MuJoCo reports
+                # so Klamp't's box() receives full dimensions.
+                geom_full_size = np.array(
+                    self.env._env.sim.model.geom(geom.full_identifier).size
+                ) * 2.0
                 self.motion_planner.move_block(
-                    name + f'__geom{i}', pos[0], size=true_geom_size
+                    name + f'__geom{i}', pos[0], size=geom_full_size
                 )
 
     def execute_path(self, path, tolerance=0.05, end_vel=0.1,
