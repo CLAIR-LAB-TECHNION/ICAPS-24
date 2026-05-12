@@ -67,6 +67,15 @@ class NTableBlocksWorld:
 
         self.step(self.robot_joint_pos, gripper_closed=False)
 
+        # Zero all qvel so any velocity introduced by stiff-contact response
+        # (when ``self.step`` resolves the small interpenetration between the
+        # freshly-placed object meshes and the table top) does not slip
+        # through to the caller. Without this, tall mesh-bodied objects
+        # (e.g. the glass bottle, with ``solimp 0.998 solref 0.001``) can
+        # acquire several m/s of linear and rad/s of angular velocity and
+        # slide off the table during the next settling pass.
+        self._mj_data.qvel[:] = 0.0
+
         if self.render_mode == "human":
             self._env.render()
 
