@@ -32,6 +32,12 @@ class ObjectManager:
             if name in self.immovable_objects:
                 continue
             self.set_object_pose(name, pos, quat)
+            # Zero out velocity. Setting only qpos leaves any residual qvel
+            # from the previous episode (or the corrective impulse generated
+            # when MuJoCo resolves a placement-time penetration of a stiff
+            # mesh) intact, which can cause tall objects to slide off their
+            # tables during the next settling pass.
+            self.set_object_vel(name, np.zeros(6))
 
     def get_all_object_positons_dict(self):
         object_poses = {name: (self.get_object_pos(name), self.get_object_quat(name)) for name in self.object_names
