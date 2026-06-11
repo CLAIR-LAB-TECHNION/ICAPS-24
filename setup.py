@@ -18,10 +18,10 @@ setup(
     packages=find_packages(),
     python_requires='>=3.9',
     install_requires=[
-        'dm_control>=1.0.16',
+        'dm_control>=1.0.16,<=1.0.38',
         'gymnasium>=0.29.1',
         'Klampt>=0.9.1',
-        'mujoco>=3.1.3',
+        'mujoco>=3.1.3,<=3.6.0',
         'PyYAML>=6.0.1',
         'aidm[pddl] @ git+https://github.com/CLAIR-LAB-TECHNION/aidm',
         'mediapy'
